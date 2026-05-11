@@ -1,0 +1,34 @@
+[
+  { "caixa_codigo": "CG-2031", "tipo": "transicao",  "valor": "lacrada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T10:05:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "transicao",  "valor": "em_transito", "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T10:30:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "peso",        "valor": 5990,          "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T11:30:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "peso",        "valor": 5980,          "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T13:00:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "tampa",       "valor": "aberta",      "em_movimento": false, "peso_anomalo": false, "abertura_indevida": true,  "timestamp": { "$date": "2026-05-11T07:55:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "peso",        "valor": 4500,          "em_movimento": false, "peso_anomalo": true,  "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T07:56:00Z" } },
+  { "caixa_codigo": "CG-2031", "tipo": "transicao",  "valor": "violada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T07:57:00Z" } },
+
+  { "caixa_codigo": "CG-2032", "tipo": "transicao",  "valor": "lacrada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T11:05:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "transicao",  "valor": "em_transito", "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T11:30:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "peso",        "valor": 4490,          "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T12:30:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "peso",        "valor": 4480,          "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-10T08:00:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "tampa",       "valor": "aberta",      "em_movimento": false, "peso_anomalo": false, "abertura_indevida": true,  "timestamp": { "$date": "2026-05-11T09:55:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "peso",        "valor": 3200,          "em_movimento": false, "peso_anomalo": true,  "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T09:56:00Z" } },
+  { "caixa_codigo": "CG-2032", "tipo": "transicao",  "valor": "violada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T09:57:00Z" } },
+
+  { "caixa_codigo": "CG-2033", "tipo": "transicao",  "valor": "lacrada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T12:05:00Z" } },
+  { "caixa_codigo": "CG-2033", "tipo": "transicao",  "valor": "em_transito", "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T12:30:00Z" } },
+  { "caixa_codigo": "CG-2033", "tipo": "peso",        "valor": 7490,          "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-09T14:00:00Z" } },
+  { "caixa_codigo": "CG-2033", "tipo": "tampa",       "valor": "aberta",      "em_movimento": false, "peso_anomalo": false, "abertura_indevida": true,  "timestamp": { "$date": "2026-05-11T11:55:00Z" } },
+  { "caixa_codigo": "CG-2033", "tipo": "peso",        "valor": 5800,          "em_movimento": false, "peso_anomalo": true,  "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T11:56:00Z" } },
+  { "caixa_codigo": "CG-2033", "tipo": "transicao",  "valor": "violada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T11:57:00Z" } },
+
+  { "caixa_codigo": "CG-2001", "tipo": "transicao",  "valor": "lacrada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-10T07:05:00Z" } },
+  { "caixa_codigo": "CG-2001", "tipo": "transicao",  "valor": "em_transito", "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-10T07:30:00Z" } },
+  { "caixa_codigo": "CG-2001", "tipo": "peso",        "valor": 4010,          "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-10T09:00:00Z" } },
+  { "caixa_codigo": "CG-2001", "tipo": "peso",        "valor": 3995,          "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-11T09:00:00Z" } },
+
+  { "caixa_codigo": "CG-2034", "tipo": "transicao",  "valor": "lacrada",     "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-01T08:05:00Z" } },
+  { "caixa_codigo": "CG-2034", "tipo": "transicao",  "valor": "em_transito", "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-01T09:00:00Z" } },
+  { "caixa_codigo": "CG-2034", "tipo": "peso",        "valor": 5390,          "em_movimento": true,  "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-02T10:00:00Z" } },
+  { "caixa_codigo": "CG-2034", "tipo": "nfc",         "valor": "confirmado",  "em_movimento": false, "peso_anomalo": false, "abertura_indevida": false, "timestamp": { "$date": "2026-05-05T13:50:00Z" } }
+]

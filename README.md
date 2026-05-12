@@ -16,7 +16,30 @@ O sistema permite acompanhar em tempo real o estado das cargas, identificar viol
 
 ## Configuração do ambiente
 
-### 1. Instalar dependências PHP
+### 1. Instalar a extensão PHP do MongoDB
+
+O XAMPP **não inclui** a extensão `ext-mongodb` por padrão. É obrigatório instalá-la antes de rodar o projeto.
+
+**Passos:**
+
+1. Verifique qual versão do PHP o seu XAMPP usa: abra `http://localhost/dashboard/phpinfo.php` e anote a versão (ex: `8.2.12`) e a arquitetura (`x64`).
+
+2. Acesse [https://pecl.php.net/package/mongodb](https://pecl.php.net/package/mongodb) e baixe a versão **2.x** compatível com o seu PHP (escolha a DLL `NTS` ou `TS` conforme indicado no phpinfo — `Thread Safety: enabled` → TS, caso contrário → NTS).
+
+   > Exemplo para PHP 8.2 x64 NTS: baixe `php_mongodb-2.x.x-8.2-nts-vs16-x64.zip`
+
+3. Extraia o arquivo `.zip`, copie o arquivo `php_mongodb.dll` para a pasta `C:\xampp\php\ext\`.
+
+4. Abra `C:\xampp\php\php.ini` em um editor de texto, localize a seção de extensões e adicione a linha:
+   ```
+   extension=mongodb
+   ```
+
+5. Reinicie o Apache no painel do XAMPP.
+
+6. Verifique: acesse `http://localhost/dashboard/phpinfo.php` e pesquise por `mongodb` — deve aparecer a seção da extensão.
+
+### 2. Instalar dependências PHP
 
 Na raiz do projeto:
 
@@ -24,7 +47,25 @@ Na raiz do projeto:
 composer install
 ```
 
-### 2. Configurar o banco de dados
+### 3. Configurar variáveis de ambiente
+
+Copie o arquivo `.env.example` para `.env` na raiz do projeto:
+
+```bash
+copy .env.example .env
+```
+
+Edite o `.env` com as credenciais do seu MongoDB local. Para instalações padrão sem autenticação, deixe `MONGO_USER` e `MONGO_PASS` em branco:
+
+```
+MONGO_HOST=localhost
+MONGO_PORT=27017
+MONGO_DB=hermex
+MONGO_USER=
+MONGO_PASS=
+```
+
+### 4. Configurar o banco de dados
 
 Abra o MongoDB Compass e conecte em `mongodb://localhost:27017`.
 
@@ -38,7 +79,7 @@ Crie um banco chamado `hermex` e importe as coleções a partir dos arquivos da 
 
 Para importar: selecione a coleção → botão **Add Data** → **Import JSON**.
 
-### 3. Configurar o Apache
+### 5. Configurar o Apache
 
 Coloque a pasta do projeto em `C:\xampp\htdocs\` e certifique-se de que o `mod_rewrite` está habilitado no Apache (painel do XAMPP → Apache → Config → `httpd.conf`, descomente `LoadModule rewrite_module`).
 

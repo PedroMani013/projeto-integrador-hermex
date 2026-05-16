@@ -1,0 +1,100 @@
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+    gap:16px;
+}
+
+.page-title{
+    font-size:28px;
+    font-weight:700;
+}
+
+.page-subtitle{
+    color:#777;
+}
+
+.cards-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-bottom:24px;
+}
+
+.card-indicador{
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.card-indicador-label{
+    color:#777;
+    margin-bottom:8px;
+}
+
+.card-indicador-valor{
+    font-size:32px;
+    font-weight:700;
+}
+
+.tabela-wrapper{
+    overflow-x:auto;
+    background:#fff;
+    border-radius:16px;
+}
+
+.hermex-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.hermex-table th{
+    text-align:left;
+    padding:16px;
+    background:#f3f4f6;
+}
+
+.hermex-table td{
+    padding:16px;
+    border-bottom:1px solid #eee;
+}
+
+.badge-status{
+    background:#dbeafe;
+    color:#2563eb;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.btn-hermex-primary{
+    background:#1e293b;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+@media(max-width:768px){
+
+    .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .page-title{
+        font-size:22px;
+    }
+
+    .hermex-table th,
+    .hermex-table td{
+        padding:12px;
+        font-size:14px;
+    }
+
+}

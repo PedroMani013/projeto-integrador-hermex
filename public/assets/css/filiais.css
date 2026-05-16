@@ -1,0 +1,303 @@
+/* =========================
+   LAYOUT GERAL
+========================= */
+
+body {
+    background: #f5f6f8;
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+aside {
+    background: #020b22 !important;
+    width: 260px !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+}
+
+aside a {
+    border-radius: 10px;
+    margin: 2px 10px;
+    transition: 0.2s ease;
+}
+
+aside a:hover {
+    background: rgba(255,255,255,0.06);
+}
+
+aside .bg-primary-container {
+    background: rgba(255,255,255,0.08) !important;
+}
+
+/* =========================
+   TOPO
+========================= */
+
+header {
+    background: #fff !important;
+    height: 72px !important;
+    padding: 0 32px !important;
+}
+
+header input {
+    height: 46px;
+    border: 1px solid #e5e7eb !important;
+    background: #f8fafc !important;
+    font-size: 14px;
+}
+
+header input:focus {
+    box-shadow: none !important;
+    border-color: #111827 !important;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    background: #f5f6f8;
+}
+
+.p-margin-page {
+    padding: 32px;
+}
+
+/* =========================
+   TITULO
+========================= */
+
+h2 {
+    font-size: 40px !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px;
+}
+
+h3 {
+    font-size: 30px !important;
+    font-weight: 700 !important;
+}
+
+/* =========================
+   BOTÃO NOVA FILIAL
+========================= */
+
+button.bg-primary {
+    background: #020b22 !important;
+    border-radius: 12px;
+    height: 52px;
+    padding: 0 24px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+button.bg-primary:hover {
+    background: #0b1736 !important;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card-shadow,
+.bg-white {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.bg-white {
+    border-radius: 18px !important;
+}
+
+/* =========================
+   FILTROS
+========================= */
+
+.grid.grid-cols-12 {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.grid.grid-cols-12 label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #6b7280;
+}
+
+.grid.grid-cols-12 button {
+    transition: 0.2s;
+}
+
+.grid.grid-cols-12 button:hover {
+    transform: translateY(-1px);
+}
+
+.grid.grid-cols-12 select,
+.grid.grid-cols-12 input {
+    height: 46px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+}
+
+/* =========================
+   TABELA
+========================= */
+
+table {
+    width: 100%;
+    background: white;
+}
+
+thead {
+    background: #f9fafb;
+}
+
+thead th {
+    font-size: 12px !important;
+    color: #6b7280 !important;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+}
+
+tbody tr {
+    transition: 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+tbody td {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status-ativa {
+    background: #bbf7d0;
+    color: #166534;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-inativa {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================
+   CODIGO
+========================= */
+
+.codigo-box {
+    background: #f3f4f6;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* =========================
+   ICONES
+========================= */
+
+.material-symbols-outlined {
+    vertical-align: middle;
+}
+
+.icon-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================
+   PAGINAÇÃO
+========================= */
+
+.pagination-box {
+    padding: 20px 24px;
+    border-top: 1px solid #e5e7eb;
+    background: #fafafa;
+}
+
+.page-active {
+    width: 36px;
+    height: 36px;
+    background: #020b22;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* =========================
+   CARDS INFERIORES
+========================= */
+
+.bottom-card {
+    min-height: 220px;
+    border-radius: 18px;
+    background: white;
+    padding: 28px;
+}
+
+.bottom-card img {
+    border-radius: 14px;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 1200px) {
+    aside {
+        width: 220px !important;
+    }
+
+    main {
+        margin-left: 220px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    aside {
+        display: none;
+    }
+
+    main {
+        margin-left: 0 !important;
+    }
+
+    .grid.grid-cols-12 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    header {
+        padding: 16px;
+    }
+
+    .p-margin-page {
+        padding: 20px;
+    }
+}

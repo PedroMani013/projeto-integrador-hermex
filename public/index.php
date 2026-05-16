@@ -16,12 +16,21 @@ define(
 );
 
 session_start();
+$totalMovimentacoes = $totalMovimentacoes ?? 0;
+
+$alertas = $alertas ?? 0;
+
+$integridade = $integridade ?? 0;
+
+$relatorios = $relatorios ?? [];
 
 require_once BASE_PATH . '/vendor/autoload.php';
 
 use App\Controllers\DashboardController;
 use App\Controllers\FilialController;
 use App\Controllers\ProdutoController;
+use App\Controllers\RelatorioController;
+
 use App\Repositories\ProdutoRepository;
 
 $action = $_GET['action'] ?? 'dashboard';
@@ -123,6 +132,22 @@ try {
 
         /*
         |--------------------------------------------------------------------------
+        | RELATÓRIOS
+        |--------------------------------------------------------------------------
+        */
+        'relatorios' =>
+            (new RelatorioController())->index(),
+
+        /*
+        |--------------------------------------------------------------------------
+        | EXPORTAR PDF RELATÓRIO
+        |--------------------------------------------------------------------------
+        */
+        'exportar-relatorio' =>
+            (new RelatorioController())->exportarPdf(),
+
+        /*
+        |--------------------------------------------------------------------------
         | 404
         |--------------------------------------------------------------------------
         */
@@ -136,7 +161,14 @@ try {
     http_response_code(500);
 
     echo '<pre>';
-    print_r($e);
+
+    print_r([
+        'mensagem' => $e->getMessage(),
+        'arquivo'  => $e->getFile(),
+        'linha'    => $e->getLine(),
+        'trace'    => $e->getTrace(),
+    ]);
+
     echo '</pre>';
 <<<<<<< HEAD
 }
@@ -208,12 +240,6 @@ function excluirProduto(): void
 */
 function salvarFilial(): void
 {
-    /*
-    |--------------------------------------------------------------------------
-    | AQUI VOCÊ VAI SALVAR NO BANCO DEPOIS
-    |--------------------------------------------------------------------------
-    */
-
     $_SESSION['sucesso'] = 'Filial cadastrada com sucesso!';
 
     header('Location: /?action=filiais');

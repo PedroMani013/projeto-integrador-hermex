@@ -7,8 +7,7 @@ $tituloPagina = 'Filiais';
 $estilos = [
     '/assets/css/bootstrap.min.css',
     '/assets/css/hermex_pages.css',
-    '/assets/css/dashboard.css',
-    '/assets/css/filiais.css'
+    '/assets/css/dashboard.css'
     
 ];
 
@@ -21,30 +20,29 @@ ob_start();
 
 <div class="container-fluid py-4 px-4 filial-page">
 
-    <!-- HEADER --->
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <!-- HEADER -->
+    <div class="page-header">
 
         <div>
 
-            <h1 class="fw-bold mb-1 titulo-filial">
+            <h1 class="page-title">
                 Gestão de Filiais
             </h1>
 
-            <p class="text-secondary mb-0">
+            <p class="page-subtitle">
                 Administre os pontos de coleta e distribuição da malha logística.
             </p>
 
         </div>
-        
 
         <a href="<?= BASE_URL ?>?action=cadastro-filial"
-             class="btn btn-primary btn-lg rounded-6 shadow-sm px-3 d-flex align-items-center gap-2">
+           class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none">
 
-                <span class="material-symbols-outlined">
-                     +
-                 </span>
+            <span class="material-symbols-outlined">
+                +
+            </span>
 
-                    Nova Filial
+            Nova Filial
 
         </a>
 
@@ -57,12 +55,14 @@ ob_start();
 
             <form method="GET">
 
-                <input type="hidden" name="action" value="filiais">
+                <input type="hidden"
+                       name="action"
+                       value="filiais">
 
                 <div class="row g-4">
 
                     <!-- ESTADO -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
 
                         <label class="form-label small text-uppercase fw-bold text-secondary">
                             Localização
@@ -71,7 +71,6 @@ ob_start();
                         <select
                             name="estado"
                             class="form-select rounded-4 shadow-none"
-                            onchange="this.form.submit()"
                         >
 
                             <option value="">
@@ -103,50 +102,8 @@ ob_start();
 
                     </div>
 
-                    <!-- STATUS -->
-                    <div class="col-lg-4">
-
-                        <label class="form-label small text-uppercase fw-bold text-secondary">
-                            Status Operacional
-                        </label>
-
-                        <select
-                            name="status"
-                            class="form-select rounded-4 shadow-none"
-                            onchange="this.form.submit()"
-                        >
-
-                            <option value="">
-                                Todos os Status
-                            </option>
-
-                            <option
-                                value="Ativa"
-                                <?= ($_GET['status'] ?? '') === 'Ativa' ? 'selected' : '' ?>
-                            >
-                                Ativa
-                            </option>
-
-                            <option
-                                value="Inativa"
-                                <?= ($_GET['status'] ?? '') === 'Inativa' ? 'selected' : '' ?>
-                            >
-                                Inativa
-                            </option>
-
-                            <option
-                                value="Manutenção"
-                                <?= ($_GET['status'] ?? '') === 'Manutenção' ? 'selected' : '' ?>
-                            >
-                                Em manutenção
-                            </option>
-
-                        </select>
-
-                    </div>
-
                     <!-- CEP -->
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
 
                         <label class="form-label small text-uppercase fw-bold text-secondary">
                             Buscar CEP
@@ -176,6 +133,10 @@ ob_start();
                     <!-- BUSCA -->
                     <div class="col-12">
 
+                        <label class="form-label small text-uppercase fw-bold text-secondary">
+                            Buscar Filial
+                        </label>
+
                         <div class="input-group">
 
                             <span class="input-group-text bg-light border-0">
@@ -194,7 +155,7 @@ ob_start();
                                 value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>"
                             >
 
-                            <button class="btn btn-dark px-4">
+                            <button class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none">
 
                                 Pesquisar
 
@@ -219,167 +180,176 @@ ob_start();
     ></div>
 
     <!-- TABELA -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="tabela-wrapper shadow-sm">
 
-        <div class="table-responsive">
+        <table class="hermex-table align-middle">
 
-            <table class="table align-middle mb-0">
+            <thead>
 
-                <thead class="table-light">
+                <tr>
 
-                    <tr>
+                    <th>
+                        FILIAL
+                    </th>
 
-                        <th class="py-4 px-4">
-                            FILIAL
-                        </th>
+                    <th>
+                        LOCALIZAÇÃO
+                    </th>
 
-                        <th class="py-4">
-                            LOCALIZAÇÃO
-                        </th>
+                    <th>
+                        CÓDIGO
+                    </th>
 
-                        <th class="py-4">
-                            CÓDIGO
-                        </th>
+                    <th class="text-end pe-4">
+                        AÇÕES
+                    </th>
 
-                        <th class="py-4">
-                            STATUS
-                        </th>
+                </tr>
 
-                        <th class="py-4 text-end pe-4">
-                            AÇÕES
-                        </th>
+            </thead>
 
-                    </tr>
+            <tbody>
 
-                </thead>
+                <?php if (!empty($filiais)): ?>
 
-                <tbody>
-
-                    <?php if (!empty($filiais)): ?>
-
-                        <?php foreach ($filiais as $filial): ?>
-
-                            <tr>
-
-                                <td class="px-4 py-4">
-
-                                    <div class="d-flex align-items-center gap-3">
-
-                                        <div class="icone-filial">
-
-                                            <span class="material-symbols-outlined">
-                                                location_on
-                                            </span>
-
-                                        </div>
-
-                                        <div>
-
-                                            <h6 class="fw-bold mb-1">
-                                                <?= htmlspecialchars($filial['nome'] ?? '') ?>
-                                            </h6>
-
-                                            <small class="text-secondary">
-                                                <?= htmlspecialchars($filial['descricao'] ?? '') ?>
-                                            </small>
-
-                                        </div>
-
-                                    </div>
-
-                                </td>
-
-                                <td>
-
-                                    <div class="fw-semibold">
-
-                                        <?= htmlspecialchars($filial['cidade'] ?? '') ?>,
-                                        <?= htmlspecialchars($filial['uf'] ?? '') ?>
-
-                                    </div>
-
-                                    <small class="text-secondary">
-
-                                        <?= htmlspecialchars(
-                                         ($filial['logradouro'] ?? '') .
-                                        ', ' .
-                                        ($filial['numero'] ?? '')) ?>
-
-                                    </small>
-
-                                </td>
-
-                                <td>
-
-                                    <span class="codigo-box">
-
-                                        <?= htmlspecialchars($filial['codigo'] ?? '') ?>
-
-                                    </span>
-
-                                </td>
-
-                                <td>
-
-                                <?php if ($filial['status'] === 'Ativa'): ?>
-
-                                    <span class="badge-status status-ativa">
-                                        <?= $filial['status'] ?>
-                                    </span>
-
-                                <?php else: ?>
-
-                                    <span class="badge-status status-inativa">
-                                     <?= $filial['status'] ?>
-                                    </span>
-
-                                <?php endif; ?>
-
-                                </td>
-
-                                <td class="text-end pe-4">
-
-                                    <button class="btn btn-light btn-sm rounded-3">
-
-                                        <span class="material-symbols-outlined">
-                                            edit
-                                        </span>
-
-                                    </button>
-
-                                    <button class="btn btn-light btn-sm rounded-3">
-
-                                        <span class="material-symbols-outlined">
-                                            more_vert
-                                        </span>
-
-                                    </button>
-
-                                </td>
-
-                            </tr>
-
-                        <?php endforeach; ?>
-
-                    <?php else: ?>
+                    <?php foreach ($filiais as $filial): ?>
 
                         <tr>
 
-                            <td colspan="5" class="text-center py-5 text-secondary">
+                            <!-- FILIAL -->
+                            <td>
 
-                                Nenhuma filial encontrada.
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="icone-filial">
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="fw-bold">
+
+                                            <?= htmlspecialchars($filial['nome'] ?? '') ?>
+
+                                        </div>
+
+                                        <small class="text-secondary">
+
+                                            <?= htmlspecialchars($filial['descricao'] ?? '') ?>
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <!-- LOCALIZAÇÃO -->
+                            <td>
+
+                                <div class="fw-semibold">
+
+                                    <?= htmlspecialchars($filial['cidade'] ?? '') ?>,
+                                    <?= htmlspecialchars($filial['uf'] ?? '') ?>
+
+                                </div>
+
+                                <small class="text-secondary">
+
+                                    <?= htmlspecialchars(
+                                        ($filial['logradouro'] ?? '')
+                                        . ', ' .
+                                        ($filial['numero'] ?? '')
+                                    ) ?>
+
+                                </small>
+
+                            </td>
+
+                            <!-- CÓDIGO -->
+                            <td>
+
+                                <span class="badge-status">
+
+                                    <?= htmlspecialchars($filial['codigo'] ?? '') ?>
+
+                                </span>
+
+                            </td>
+
+                            <!-- AÇÕES -->
+                            <td class="text-end pe-4">
+
+                                <div class="d-flex justify-content-end gap-2">
+
+                                    <!-- EDITAR -->
+                                    <a
+                                        href="/?action=editar-filial&id=<?= urlencode((string)($filial['_id'] ?? $filial['id'] ?? '')) ?>"
+                                        class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none"
+                                        title="Editar filial"
+                                    >
+
+                                        <span class="material-symbols-outlined">
+                                            Editar
+                                        </span>
+
+                                    </a>
+
+                                    <!-- EXCLUIR -->
+                                    <form
+                                        method="POST"
+                                        action="/?action=excluir-filial"
+                                        onsubmit="return confirm('Deseja excluir esta filial?')"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?= htmlspecialchars((string)($filial['_id'] ?? $filial['id'] ?? '')) ?>"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none"
+                                            style="background:#dc3545;border-color:#dc3545;color:#fff;"
+                                            title="Excluir filial"
+                                        >
+
+                                            <span class="material-symbols-outlined">
+                                                Excluir
+                                            </span>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
 
                             </td>
 
                         </tr>
 
-                    <?php endif; ?>
+                    <?php endforeach; ?>
 
-                </tbody>
+                <?php else: ?>
 
-            </table>
+                    <tr>
 
-        </div>
+                        <td colspan="4"
+                            class="text-center py-5 text-secondary">
+
+                            Nenhuma filial encontrada.
+
+                        </td>
+
+                    </tr>
+
+                <?php endif; ?>
+
+            </tbody>
+
+        </table>
 
     </div>
 

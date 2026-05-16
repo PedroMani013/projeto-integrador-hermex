@@ -111,6 +111,9 @@ class DashboardRepository
 
         $alertas = [];
         foreach ($docs as $doc) {
+            if (!isset($doc['caixa_id'])) {
+                continue;
+            }
             $caixa = $this->db->caixas->findOne(['_id' => $doc['caixa_id']]);
             if ($caixa === null) {
                 continue;

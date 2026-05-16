@@ -16,13 +16,6 @@ define(
 );
 
 session_start();
-$totalMovimentacoes = $totalMovimentacoes ?? 0;
-
-$alertas = $alertas ?? 0;
-
-$integridade = $integridade ?? 0;
-
-$relatorios = $relatorios ?? [];
 
 require_once BASE_PATH . '/vendor/autoload.php';
 
@@ -39,33 +32,6 @@ try {
 
     match ($action) {
 
-<<<<<<< HEAD
-        // dashboard
-        'dashboard', '' =>
-            (new DashboardController())->index(),
-
-        // filiais
-        'filiais', '' =>
-            (new FilialController())->index(),
-
-        // produtos
-        'produtos' =>
-            (new ProdutoController())->index(),
-
-        // cadastro produto
-        'cadastro-produto' =>
-            require BASE_PATH . '/app/Views/produtos/cadastro-produto.php',
-
-        // salvar produto
-        'salvar-produto' =>
-            salvarProduto(),
-
-        // excluir produto
-        'excluir-produto' =>
-            excluirProduto(),
-
-        // 404
-=======
         /*
         |--------------------------------------------------------------------------
         | DASHBOARD
@@ -140,18 +106,17 @@ try {
 
         /*
         |--------------------------------------------------------------------------
-        | EXPORTAR PDF RELATÓRIO
+        | EXPORTAR PDF
         |--------------------------------------------------------------------------
         */
         'exportar-relatorio' =>
-            (new RelatorioController())->exportarPdf(),
+            (new RelatorioController())->pdf(),
 
         /*
         |--------------------------------------------------------------------------
         | 404
         |--------------------------------------------------------------------------
         */
->>>>>>> 8bbfce1 (Adiciona novas rotas para gerenciamento de filiais e produtos, incluindo salvar e excluir funcionalidades)
         default =>
             call404(),
     };
@@ -162,41 +127,9 @@ try {
 
     echo '<pre>';
 
-    print_r([
-        'mensagem' => $e->getMessage(),
-        'arquivo'  => $e->getFile(),
-        'linha'    => $e->getLine(),
-        'trace'    => $e->getTrace(),
-    ]);
+    print_r($e);
 
     echo '</pre>';
-<<<<<<< HEAD
-}
-
-function salvarProduto(): void
-{
-    $repository = new ProdutoRepository();
-
-    $repository->salvar($_POST);
-
-    header('Location: /?action=produtos');
-
-    exit;
-}
-
-function excluirProduto(): void
-{
-    $id = (int)($_POST['id'] ?? 0);
-
-    $repository = new ProdutoRepository();
-
-    $repository->excluir($id);
-
-    header('Location: /?action=produtos');
-
-    exit;
-=======
->>>>>>> 8bbfce1 (Adiciona novas rotas para gerenciamento de filiais e produtos, incluindo salvar e excluir funcionalidades)
 }
 
 /*
@@ -222,7 +155,7 @@ function salvarProduto(): void
 */
 function excluirProduto(): void
 {
-    $id = (int) ($_POST['id'] ?? 0);
+    $id = $_POST['id'] ?? '';
 
     $repository = new ProdutoRepository();
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * hermeX - Gestão de Itens Custodiados.
+ * hermeX - Gestão de Produtos
  * View: app/Views/produtos/index.php
  */
 
@@ -8,9 +8,9 @@ use App\Models\Produto;
 
 $tituloPagina = 'Produtos';
 
-// Configuração de estilos e scripts
 $estilos = [
     '/assets/css/dashboard.css',
+    '/assets/css/hermex_pages.css',
     '/assets/css/produtos.css'
 ];
 
@@ -18,7 +18,6 @@ $scripts = [
     '/assets/js/produtos.js'
 ];
 
-// Dados padrão
 $produtos = $produtos ?? [];
 
 $indicadores = $indicadores ?? [
@@ -39,406 +38,590 @@ $porPagina    = (int) ($paginacao['porPagina'] ?? 10);
 $total        = (int) ($paginacao['total'] ?? 0);
 $totalPaginas = (int) ceil($total / max(1, $porPagina));
 
+$agora = new \DateTimeImmutable(
+    'now',
+    new \DateTimeZone('America/Sao_Paulo')
+);
+
 ob_start();
 ?>
 
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
-<script>
-tailwind.config = {
-    theme: {
-        extend: {
-            colors: {
-                primary: "#040c1c",
-                background: "#f7fafc",
-                "on-surface": "#181c1e",
-                "on-surface-variant": "#45474c",
-                "outline-variant": "#c6c6cd",
-                "primary-fixed": "#dae2fa",
-                "secondary-fixed": "#ffe08b",
-                "tertiary-fixed": "#a3f69c",
-                "on-tertiary-fixed-variant": "#005312",
-                error: "#ba1a1a",
-                "error-container": "#ffdad6"
-            }
-        }
-    }
-}
-</script>
-
-<style>
-.material-symbols-outlined {
-    font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
-}
-
-.herme-x-ui-wrapper {
-    font-family: 'Inter', sans-serif;
-}
-</style>
-
-<div class="herme-x-ui-wrapper min-h-screen bg-background text-on-surface p-8">
+<div class="container-fluid py-4">
 
     <!-- HEADER -->
-    <div class="flex justify-between items-end mb-8">
+    <div class="page-header">
 
-        <div>
-            <h1 class="text-[24px] font-bold text-primary leading-tight">
-                Gestão de Itens Custodiados
+        <div class="page-title-block">
+
+            <h1 class="page-title">
+                Gestão de Produtos
             </h1>
 
-            <p class="text-on-surface-variant text-[14px]">
-                Gerencie o catálogo de produtos de alto valor assegurado.
+            <p class="page-subtitle mb-0">
+
+                Gerencie os itens custodiados monitorados pela hermeX
+
+                <span class="bullet-sep" aria-hidden="true">
+                    •
+                </span>
+
+                <time datetime="<?= $agora->format('Y-m-d\TH:i') ?>">
+
+                    <?= $agora->format('d/m/Y H:i') ?>
+
+                </time>
             </p>
         </div>
 
-        <!-- BOTÃO NOVO PRODUTO -->
-        <a href="<?= BASE_URL ?>?action=cadastro-produto"
-           class="bg-primary text-white px-6 py-3 rounded-lg flex items-center gap-2 text-[14px] font-semibold hover:opacity-90 transition-all shadow-lg shadow-primary/10">
+        <div class="page-header-actions">
 
-            <span class="material-symbols-outlined text-[20px]">
-                add
-            </span>
+            <a href="<?= BASE_URL ?>?action=cadastro-produto"
+               class="btn-hermex-primary text-decoration-none d-inline-flex align-items-center gap-2">
 
-            Novo Produto
-        </a>
+                <span style="font-size:20px;">
+                    +
+                </span>
+
+                Novo Produto
+            </a>
+        </div>
     </div>
 
     <!-- CARDS -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="row g-4 mb-4">
 
         <!-- TOTAL -->
-        <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-4">
+        <div class="col-12 col-sm-6 col-xl-3">
 
-            <div class="w-10 h-10 rounded-lg bg-primary-fixed/30 flex items-center justify-center">
+            <div class="card-indicador h-100">
 
-                <span class="material-symbols-outlined text-primary"
-                      style="font-variation-settings: 'FILL' 1;">
-                    inventory
-                </span>
-            </div>
-
-            <div>
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <p class="card-indicador-label">
                     TOTAL DE SKUS
                 </p>
 
-                <h3 class="text-[28px] font-bold text-primary">
+                <p class="card-indicador-valor">
                     <?= $indicadores['totalSkus'] ?>
-                </h3>
-
-                <p class="text-on-surface-variant text-[11px]">
-                    Produtos registrados
                 </p>
+
+                <small class="text-muted">
+                    Produtos cadastrados
+                </small>
             </div>
         </div>
 
         <!-- MÉDICOS -->
-        <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-4">
+        <div class="col-12 col-sm-6 col-xl-3">
 
-            <div class="w-10 h-10 rounded-lg bg-tertiary-fixed/30 flex items-center justify-center">
+            <div class="card-indicador h-100">
 
-                <span class="material-symbols-outlined text-on-tertiary-fixed-variant"
-                      style="font-variation-settings: 'FILL' 1;">
-                    medical_services
-                </span>
-            </div>
-
-            <div>
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <p class="card-indicador-label">
                     INSUMOS MÉDICOS
                 </p>
 
-                <h3 class="text-[28px] font-bold text-primary">
+                <p class="card-indicador-valor">
                     <?= $indicadores['insumosMedicos'] ?>
-                </h3>
-
-                <p class="text-on-surface-variant text-[11px]">
-                    Itens críticos
                 </p>
+
+                <small class="text-muted">
+                    Produtos críticos
+                </small>
             </div>
         </div>
 
         <!-- TOLERÂNCIA -->
-        <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-4">
+        <div class="col-12 col-sm-6 col-xl-3">
 
-            <div class="w-10 h-10 rounded-lg bg-secondary-fixed/30 flex items-center justify-center">
+            <div class="card-indicador h-100">
 
-                <span class="material-symbols-outlined text-[#745b00]"
-                      style="font-variation-settings: 'FILL' 1;">
-                    precision_manufacturing
-                </span>
-            </div>
-
-            <div>
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <p class="card-indicador-label">
                     TOLERÂNCIA CRÍTICA
                 </p>
 
-                <h3 class="text-[28px] font-bold text-primary">
+                <p class="card-indicador-valor">
                     <?= $indicadores['toleranciaCritica'] ?>
-                </h3>
-
-                <p class="text-on-surface-variant text-[11px]">
-                    Margem ≤ 1%
                 </p>
+
+                <small class="text-muted">
+                    Margem ≤ 1%
+                </small>
             </div>
         </div>
 
         <!-- NFC -->
-        <div class="bg-white p-5 rounded-xl border border-outline-variant shadow-sm flex flex-col gap-4">
+        <div class="col-12 col-sm-6 col-xl-3">
 
-            <div class="w-10 h-10 rounded-lg bg-error-container/50 flex items-center justify-center">
+            <div class="card-indicador h-100">
 
-                <span class="material-symbols-outlined text-error"
-                      style="font-variation-settings: 'FILL' 1;">
-                    nfc
-                </span>
-            </div>
-
-            <div>
-                <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
+                <p class="card-indicador-label">
                     TAGS NFC
                 </p>
 
-                <h3 class="text-[28px] font-bold text-primary">
+                <p class="card-indicador-valor">
                     <?= $indicadores['tagsNfc'] ?>
-                </h3>
-
-                <p class="text-on-surface-variant text-[11px]">
-                    Dispositivos ativos
                 </p>
+
+                <small class="text-muted">
+                    Dispositivos ativos
+                </small>
             </div>
         </div>
+
     </div>
 
     <!-- TABELA -->
-    <section class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+    <section class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
         <!-- HEADER TABELA -->
-        <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+        <div class="card-header bg-white border-bottom py-3 px-4">
 
-            <div class="flex items-center gap-3">
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
 
-                <h2 class="text-[18px] font-semibold text-primary">
-                    Catálogo de Produtos
-                </h2>
+                <div>
 
-                <span class="bg-background px-2 py-0.5 rounded text-[11px] font-bold text-on-surface-variant">
-                    <?= $total ?> itens
-                </span>
+                    <h2 class="h4 fw-bold mb-1">
+                        Catálogo de Produtos
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        <?= $total ?> produtos cadastrados
+
+                    </p>
+                </div>
+
+                <!-- BUSCA -->
+                <form method="GET"
+                      class="d-flex flex-column flex-sm-row gap-2">
+
+                    <input type="hidden"
+                           name="action"
+                           value="produtos">
+
+                    <input type="text"
+                           name="busca"
+                           value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>"
+                           placeholder="Buscar produto..."
+                           class="form-control">
+
+                    <button type="submit"
+                            class="btn btn-dark">
+
+                        Buscar
+                    </button>
+                </form>
             </div>
-
-            <!-- BUSCA -->
-            <form method="GET" class="relative">
-
-                <input type="hidden" name="action" value="produtos">
-
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">
-                    search
-                </span>
-
-                <input
-                    type="text"
-                    name="busca"
-                    placeholder="Buscar produto..."
-                    value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>"
-                    class="bg-background border-none rounded-lg pl-10 pr-4 py-2 text-[13px] focus:ring-1 focus:ring-primary/20 w-64"
-                >
-            </form>
         </div>
 
-        <!-- TABELA -->
-        <table class="w-full text-left border-collapse">
+        <?php if (empty($produtos)): ?>
 
-            <thead>
-                <tr class="bg-background/50">
+            <!-- VAZIO -->
+            <div class="card-body text-center py-5">
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase">
-                        Produto
-                    </th>
+                <div class="mb-3"
+                     style="font-size:48px;">
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase">
-                        Categoria
-                    </th>
+                    📦
+                </div>
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase text-center">
-                        Tolerância
-                    </th>
+                <h4 class="fw-bold">
+                    Nenhum produto encontrado
+                </h4>
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase">
-                        NFC
-                    </th>
+                <p class="text-muted mb-0">
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase">
-                        Status
-                    </th>
+                    Cadastre um novo produto para começar.
 
-                    <th class="px-6 py-4 text-[12px] font-bold text-on-surface-variant uppercase text-right">
-                        Ações
-                    </th>
-                </tr>
-            </thead>
+                </p>
+            </div>
 
-            <tbody class="divide-y divide-outline-variant">
+        <?php else: ?>
 
-                <?php if (empty($produtos)): ?>
+            <!-- TABELA DESKTOP -->
+            <div class="table-responsive d-none d-lg-block">
 
-                    <tr>
-                        <td colspan="6"
-                            class="px-6 py-12 text-center text-on-surface-variant">
+                <table class="table align-middle mb-0">
 
-                            <span class="material-symbols-outlined text-[48px] opacity-20 block mb-2">
-                                inventory_2
-                            </span>
+                    <thead class="table-light">
 
-                            Nenhum produto cadastrado.
-                        </td>
-                    </tr>
+                        <tr>
 
-                <?php else: ?>
+                            <th class="px-4 py-3">
+                                Produto
+                            </th>
 
-                    <?php foreach ($produtos as $produto): ?>
+                            <th class="py-3">
+                                Categoria
+                            </th>
 
-                        <?php $p = (object) $produto; ?>
+                            <th class="py-3 text-center">
+                                Tolerância
+                            </th>
 
-                        <?php
-                        $tolerancia = (float)($p->toleranciaPeso ?? 0);
+                            <th class="py-3">
+                                NFC
+                            </th>
 
-                        $ativo = (bool)($p->ativo ?? false);
+                            <th class="py-3">
+                                Status
+                            </th>
 
-                        $categoria = $p->categoria ?? '-';
-
-                        $codigoNfc = $p->codigoNfc ?? '-';
-
-                        $imagem = $p->imagem ?? null;
-                        ?>
-
-                        <tr class="hover:bg-background/30 transition-colors">
-
-                            <!-- PRODUTO -->
-                            <td class="px-6 py-4">
-
-                                <div class="flex items-center gap-4">
-
-                                    <div class="w-10 h-10 rounded border border-outline-variant overflow-hidden bg-background flex items-center justify-center">
-
-                                        <?php if (!empty($imagem)): ?>
-
-                                            <img
-                                                src="<?= htmlspecialchars($imagem) ?>"
-                                                class="w-full h-full object-cover"
-                                            >
-
-                                        <?php else: ?>
-
-                                            <span class="material-symbols-outlined text-on-surface-variant/40">
-                                                package_2
-                                            </span>
-
-                                        <?php endif; ?>
-                                    </div>
-
-                                    <div class="flex flex-col">
-
-                                        <span class="text-[13px] font-bold text-primary uppercase">
-                                            <?= htmlspecialchars($p->nome ?? '-') ?>
-                                        </span>
-
-                                        <span class="text-on-surface-variant text-[11px]">
-                                            SKU:
-                                            <?= htmlspecialchars($p->sku ?? '-') ?>
-                                        </span>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <!-- CATEGORIA -->
-                            <td class="px-6 py-4">
-
-                                <span class="bg-primary-fixed/40 text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase">
-
-                                    <?= htmlspecialchars($categoria) ?>
-                                </span>
-                            </td>
-
-                            <!-- TOLERÂNCIA -->
-                            <td class="px-6 py-4 text-center">
-
-                                <span class="font-mono text-[13px] font-bold <?= $tolerancia <= 1 ? 'text-error' : 'text-primary' ?>">
-
-                                    ± <?= number_format($tolerancia, 1, ',', '.') ?>%
-                                </span>
-                            </td>
-
-                            <!-- NFC -->
-                            <td class="px-6 py-4 font-mono text-[12px] text-on-surface-variant">
-
-                                <?= htmlspecialchars($codigoNfc) ?>
-                            </td>
-
-                            <!-- STATUS -->
-                            <td class="px-6 py-4">
-
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold <?= $ativo ? 'bg-tertiary-fixed/30 text-on-tertiary-fixed-variant' : 'bg-outline-variant/30 text-on-surface-variant' ?>">
-
-                                    <span class="w-1.5 h-1.5 rounded-full <?= $ativo ? 'bg-on-tertiary-fixed-variant' : 'bg-on-surface-variant' ?>">
-                                    </span>
-
-                                    <?= $ativo ? 'ATIVO' : 'INATIVO' ?>
-                                </span>
-                            </td>
-
-                            <!-- AÇÕES -->
-                            <td class="px-6 py-4 text-right">
-
-                                <div class="flex justify-end gap-2">
-
-                                    <!-- EDITAR -->
-                                    <a href="/?action=editar-produto&id=<?= (int)($p->id ?? 0) ?>"
-                                       class="p-2 hover:bg-background rounded-lg text-on-surface-variant transition-colors">
-
-                                        <span class="material-symbols-outlined text-[20px]">
-                                            edit
-                                        </span>
-                                    </a>
-
-                                    <!-- EXCLUIR -->
-                                    <form method="POST"
-                                          action="/?action=excluir-produto"
-                                          onsubmit="return confirm('Deseja excluir este produto?')">
-
-                                        <input
-                                            type="hidden"
-                                            name="id"
-                                            value="<?= (int)($p->id ?? 0) ?>"
-                                        >
-
-                                        <button type="submit"
-                                                class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
-
-                                            <span class="material-symbols-outlined text-[20px]">
-                                                delete
-                                            </span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            <th class="py-3 text-end pe-4">
+                                Ações
+                            </th>
                         </tr>
 
-                    <?php endforeach; ?>
+                    </thead>
 
-                <?php endif; ?>
-            </tbody>
-        </table>
+                    <tbody>
+
+                        <?php foreach ($produtos as $produto): ?>
+
+                            <?php
+                            $p = (object) $produto;
+
+                            $tolerancia = (float)($p->toleranciaPeso ?? 0);
+
+                            $ativo = (bool)($p->ativo ?? false);
+
+                            $imagem = $p->imagem ?? null;
+                            ?>
+
+                            <tr>
+
+                                <!-- PRODUTO -->
+                                <td class="px-4 py-3">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="rounded-3 overflow-hidden bg-light d-flex align-items-center justify-content-center"
+                                             style="
+                                                width:56px;
+                                                height:56px;
+                                             ">
+
+                                            <?php if (!empty($imagem)): ?>
+
+                                                <img src="<?= htmlspecialchars($imagem) ?>"
+                                                     alt="Produto"
+                                                     class="w-100 h-100 object-fit-cover">
+
+                                            <?php else: ?>
+
+                                                <span style="font-size:24px;">
+                                                    📦
+                                                </span>
+
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div>
+
+                                            <div class="fw-bold">
+
+                                                <?= htmlspecialchars($p->nome ?? '-') ?>
+
+                                            </div>
+
+                                            <small class="text-muted">
+
+                                                SKU:
+                                                <?= htmlspecialchars($p->sku ?? '-') ?>
+
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- CATEGORIA -->
+                                <td>
+
+                                    <span class="badge bg-primary-subtle text-dark">
+
+                                        <?= htmlspecialchars($p->categoria ?? '-') ?>
+
+                                    </span>
+                                </td>
+
+                                <!-- TOLERÂNCIA -->
+                                <td class="text-center">
+
+                                    <span class="fw-bold <?= $tolerancia <= 1 ? 'text-danger' : 'text-success' ?>">
+
+                                        ± <?= number_format($tolerancia, 1, ',', '.') ?>%
+
+                                    </span>
+                                </td>
+
+                                <!-- NFC -->
+                                <td>
+
+                                    <span class="font-monospace">
+
+                                        <?= htmlspecialchars($p->codigoNfc ?? '-') ?>
+
+                                    </span>
+                                </td>
+
+                                <!-- STATUS -->
+                                <td>
+
+                                    <?php if ($ativo): ?>
+
+                                        <span class="badge bg-success-subtle text-success">
+
+                                            ATIVO
+                                        </span>
+
+                                    <?php else: ?>
+
+                                        <span class="badge bg-secondary-subtle text-secondary">
+
+                                            INATIVO
+                                        </span>
+
+                                    <?php endif; ?>
+                                </td>
+
+                                <!-- AÇÕES -->
+                                <td class="text-end pe-4">
+
+                                    <div class="d-flex justify-content-end gap-2">
+
+                                        <!-- EDITAR -->
+                                        <a href="/?action=editar-produto&id=<?= (int)($p->id ?? 0) ?>"
+                                           class="btn btn-outline-primary btn-sm">
+
+                                            Editar
+                                        </a>
+
+                                        <!-- EXCLUIR -->
+                                        <form method="POST"
+                                              action="/?action=excluir-produto"
+                                              onsubmit="return confirm('Deseja excluir este produto?')">
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="<?= (int)($p->id ?? 0) ?>">
+
+                                            <button type="submit"
+                                                    class="btn btn-outline-danger btn-sm">
+
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- MOBILE -->
+            <div class="d-flex d-lg-none flex-column gap-3 p-3">
+
+                <?php foreach ($produtos as $produto): ?>
+
+                    <?php
+                    $p = (object) $produto;
+
+                    $tolerancia = (float)($p->toleranciaPeso ?? 0);
+
+                    $ativo = (bool)($p->ativo ?? false);
+                    ?>
+
+                    <div class="card border rounded-4 shadow-sm">
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1">
+
+                                        <?= htmlspecialchars($p->nome ?? '-') ?>
+
+                                    </h5>
+
+                                    <small class="text-muted">
+
+                                        SKU:
+                                        <?= htmlspecialchars($p->sku ?? '-') ?>
+
+                                    </small>
+                                </div>
+
+                                <?php if ($ativo): ?>
+
+                                    <span class="badge bg-success-subtle text-success">
+
+                                        ATIVO
+                                    </span>
+
+                                <?php else: ?>
+
+                                    <span class="badge bg-secondary-subtle text-secondary">
+
+                                        INATIVO
+                                    </span>
+
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+
+                                <div class="col-6">
+
+                                    <small class="text-muted d-block">
+                                        Categoria
+                                    </small>
+
+                                    <strong>
+
+                                        <?= htmlspecialchars($p->categoria ?? '-') ?>
+
+                                    </strong>
+                                </div>
+
+                                <div class="col-6">
+
+                                    <small class="text-muted d-block">
+                                        Tolerância
+                                    </small>
+
+                                    <strong class="<?= $tolerancia <= 1 ? 'text-danger' : 'text-success' ?>">
+
+                                        ± <?= number_format($tolerancia, 1, ',', '.') ?>%
+
+                                    </strong>
+                                </div>
+
+                                <div class="col-12">
+
+                                    <small class="text-muted d-block">
+                                        NFC
+                                    </small>
+
+                                    <span class="font-monospace">
+
+                                        <?= htmlspecialchars($p->codigoNfc ?? '-') ?>
+
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+
+                                <a href="/?action=editar-produto&id=<?= (int)($p->id ?? 0) ?>"
+                                   class="btn btn-outline-primary btn-sm flex-fill">
+
+                                    Editar
+                                </a>
+
+                                <form method="POST"
+                                      action="/?action=excluir-produto"
+                                      class="flex-fill"
+                                      onsubmit="return confirm('Deseja excluir este produto?')">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="<?= (int)($p->id ?? 0) ?>">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger btn-sm w-100">
+
+                                        Excluir
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
+            <!-- PAGINAÇÃO -->
+            <?php if ($totalPaginas > 1): ?>
+
+                <div class="card-footer bg-white border-top px-4 py-3">
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+                        <div class="text-muted">
+
+                            Exibindo
+                            <?= (($pagina - 1) * $porPagina) + 1 ?>
+                            até
+                            <?= min($pagina * $porPagina, $total) ?>
+                            de
+                            <?= $total ?>
+                            produtos
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <!-- anterior -->
+                            <?php if ($pagina > 1): ?>
+
+                                <a href="/?action=produtos&pagina=<?= $pagina - 1 ?>"
+                                   class="btn btn-outline-secondary btn-sm">
+
+                                    ← Anterior
+                                </a>
+
+                            <?php else: ?>
+
+                                <button class="btn btn-outline-secondary btn-sm"
+                                        disabled>
+
+                                    ← Anterior
+                                </button>
+
+                            <?php endif; ?>
+
+                            <!-- página -->
+                            <button class="btn btn-dark btn-sm"
+                                    disabled>
+
+                                <?= $pagina ?> / <?= $totalPaginas ?>
+
+                            </button>
+
+                            <!-- próxima -->
+                            <?php if ($pagina < $totalPaginas): ?>
+
+                                <a href="/?action=produtos&pagina=<?= $pagina + 1 ?>"
+                                   class="btn btn-outline-secondary btn-sm">
+
+                                    Próxima →
+                                </a>
+
+                            <?php else: ?>
+
+                                <button class="btn btn-outline-secondary btn-sm"
+                                        disabled>
+
+                                    Próxima →
+                                </button>
+
+                            <?php endif; ?>
+
+                        </div>
+                    </div>
+                </div>
+
+            <?php endif; ?>
+
+        <?php endif; ?>
+
     </section>
+
 </div>
 
 <?php

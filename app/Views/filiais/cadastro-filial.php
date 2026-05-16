@@ -29,15 +29,9 @@ ob_start();
             </h1>
 
             <p class="text-secondary mb-0">
-                Gerencie as unidades logísticas da hermeX
+                Cadastre as unidades logísticas da hermeX
             </p>
         </div>
-
-        <a href="/?action=filiais"
-           class="btn btn-dark d-flex align-items-center gap-2 px-4 py-2">
-            <span class="fs-5">←</span>
-            Voltar
-        </a>
 
     </div>
 
@@ -171,32 +165,12 @@ ob_start();
                                placeholder="(00) 00000-0000">
                     </div>
 
-                    <!-- STATUS -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            Status
-                        </label>
-
-                        <select name="status"
-                                class="form-select form-select-lg">
-
-                            <option value="ativa">
-                                Ativa
-                            </option>
-
-                            <option value="inativa">
-                                Inativa
-                            </option>
-
-                        </select>
-                    </div>
-
                 </div>
 
                 <!-- BOTÕES -->
                 <div class="d-flex justify-content-end gap-3 mt-5 flex-wrap">
 
-                    <a href="/?action=filiais"
+                    <a href="<?= BASE_URL ?>?action=filiais"
                        class="btn btn-outline-secondary px-4 py-2">
                         Cancelar
                     </a>

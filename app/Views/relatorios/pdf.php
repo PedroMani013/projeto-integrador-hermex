@@ -1,0 +1,105 @@
+<style>
+
+body{
+    font-family: Arial;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:bold;
+    color:#1e293b;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #ccc;
+    padding:10px;
+}
+
+th{
+    background:#1e293b;
+    color:#fff;
+}
+
+</style>
+
+<div class="logo">
+    hermeX
+</div>
+
+<h2>
+    Relatório Operacional
+</h2>
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>Código</th>
+            <th>Status</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Total Itens</th>
+            <th>Transportadora</th>
+            <th>Data</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <?php foreach ($relatorios as $relatorio): ?>
+
+            <tr>
+
+                <td>
+                    <?= $relatorio['codigo'] ?? '-' ?>
+                </td>
+
+                <td>
+                    <?= $relatorio['estado'] ?? '-' ?>
+                </td>
+
+                <td>
+                    <?= $relatorio['filial_origem_nome'] ?? '-' ?>
+                </td>
+
+                <td>
+                    <?= $relatorio['filial_destino_nome'] ?? '-' ?>
+                </td>
+
+                <td>
+                    <?= $relatorio['total_itens'] ?? 0 ?>
+                </td>
+
+                <td>
+                    <?= $relatorio['transportadora'] ?? '-' ?>
+                </td>
+
+                <td>
+
+                    <?php if (!empty($relatorio['criado_em'])): ?>
+
+                        <?= $relatorio['criado_em']
+                            ->toDateTime()
+                            ->format('d/m/Y H:i') ?>
+
+                    <?php endif; ?>
+
+                </td>
+
+            </tr>
+
+        <?php endforeach; ?>
+
+    </tbody>
+
+</table>

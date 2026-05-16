@@ -14,6 +14,7 @@
 
     <!-- design tokens -->
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/hermex_pages.css">
 
     <!-- CSS específico da página -->
     <?php foreach ($estilos ?? [] as $css): ?>

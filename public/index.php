@@ -140,11 +140,20 @@ try {
 */
 function salvarProduto(): void
 {
-    $repository = new ProdutoRepository();
+    try {
 
-    $repository->salvar($_POST);
+        $repository = new ProdutoRepository();
 
-    header('Location: /?action=produtos');
+        $repository->salvar($_POST);
+
+        header('Location: /?action=produtos');
+
+    } catch (\RuntimeException $e) {
+
+        $_SESSION['erro'] = $e->getMessage();
+
+        header('Location: /?action=cadastro-produto');
+    }
 
     exit;
 }

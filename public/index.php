@@ -165,11 +165,12 @@ function salvarProduto(): void
 */
 function excluirProduto(): void
 {
-    $id = $_POST['id'] ?? '';
+    $id = trim($_POST['id'] ?? '');
 
-    $repository = new ProdutoRepository();
-
-    $repository->excluir($id);
+    if ($id !== '') {
+        $repository = new ProdutoRepository();
+        $repository->excluir($id);
+    }
 
     header('Location: /?action=produtos');
 

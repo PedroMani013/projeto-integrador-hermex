@@ -27,7 +27,7 @@ class ProdutoController
                 array_filter(
                     $produtos,
                     fn ($p) =>
-                        strtolower($p['categoria'] ?? '') === 'médico'
+                        strtolower((string)($p['categoria'] ?? '')) === 'médico'
                 )
             ),
 
@@ -35,7 +35,7 @@ class ProdutoController
                 array_filter(
                     $produtos,
                     fn ($p) =>
-                        (float)($p['toleranciaPeso'] ?? 0) <= 1
+                        (float)($p['tolerancia'] ?? 0) <= 1
                 )
             ),
 
@@ -43,7 +43,7 @@ class ProdutoController
                 array_filter(
                     $produtos,
                     fn ($p) =>
-                        !empty($p['codigoNfc'])
+                        !empty($p['codigo_nfc'])
                 )
             ),
         ];

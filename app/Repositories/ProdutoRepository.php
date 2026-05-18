@@ -4,57 +4,40 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use Config\DatabaseConnection;
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
+use MongoDB\Collection;
+
 class ProdutoRepository
 {
+    private Collection $collection;
+
     public function __construct()
     {
-        if (!isset($_SESSION)) {
-            session_start();
-        }
+        $db = DatabaseConnection::getInstance()->getDb();
 
-        if (!isset($_SESSION['produtos'])) {
-
-            $_SESSION['produtos'] = [
-
-                [
-                    'id' => 1,
-                    'sku' => 'HM-ELE-0042',
-                    'nome' => 'MacBook Pro M3 Max',
-                    'categoria' => 'Eletrônico',
-                    'toleranciaPeso' => 0.8,
-                    'codigoNfc' => 'NFC-001',
-                    'pesoUnitario' => 2.1,
-                    'descricao' => 'Notebook de alto desempenho',
-                    'ativo' => true,
-                    'imagem' => null
-                ],
-
-                [
-                    'id' => 2,
-                    'sku' => 'HM-MED-0011',
-                    'nome' => 'Monitor Cardíaco',
-                    'categoria' => 'Médico',
-                    'toleranciaPeso' => 2.5,
-                    'codigoNfc' => 'NFC-002',
-                    'pesoUnitario' => 1.4,
-                    'descricao' => 'Equipamento hospitalar',
-                    'ativo' => true,
-                    'imagem' => null
-                ]
-            ];
-        }
+        $this->collection = $db->produtos;
     }
 
     public function listar(): array
     {
-        return $_SESSION['produtos'];
+        return $this->collection
+            ->find([], ['sort' => ['criado_em' => -1]])
+            ->toArray();
     }
 
     public function salvar(array $dados): void
     {
-        $produtos = $_SESSION['produtos'];
+        $nome     = trim($dados['nome'] ?? '');
+        $sku      = trim($dados['sku'] ?? '');
+        $categoria = trim($dados['categoria'] ?? '');
 
-        $novoId = count($produtos) + 1;
+        if ($nome === '' || $sku === '' || $categoria === '') {
+            throw new \InvalidArgumentException(
+                'Campos obrigatórios ausentes: nome, SKU e categoria são exigidos.'
+            );
+        }
 
         $imagem = null;
 
@@ -65,28 +48,42 @@ class ProdutoRepository
             $imagem = $this->validarEMoverImagem($_FILES['imagem']);
         }
 
-        $_SESSION['produtos'][] = [
+        $this->collection->insertOne([
+            'sku'            => $sku,
+            'nome'           => $nome,
+            'categoria'      => $categoria,
+            'codigo_nfc'     => trim($dados['codigoNfc'] ?? ''),
+            'peso_unitario'  => (float) ($dados['pesoUnitario'] ?? 0),
+            'tolerancia'     => (float) ($dados['toleranciaPeso'] ?? 0),
+            'descricao'      => trim($dados['descricao'] ?? ''),
+            'ativo'          => true,
+            'imagem'         => $imagem,
+            'criado_em'      => new UTCDateTime(),
+        ]);
+    }
 
-            'id' => $novoId,
+    public function buscarPorId(string $id): ?array
+    {
+        try {
+            $resultado = $this->collection->findOne([
+                '_id' => new ObjectId($id)
+            ]);
+        } catch (\Exception) {
+            return null;
+        }
 
-            'nome' => $dados['nome'] ?? '',
+        return $resultado ? (array) $resultado : null;
+    }
 
-            'sku' => $dados['sku'] ?? '',
-
-            'categoria' => $dados['categoria'] ?? '',
-
-            'codigoNfc' => $dados['codigoNfc'] ?? '',
-
-            'pesoUnitario' => (float)($dados['pesoUnitario'] ?? 0),
-
-            'toleranciaPeso' => (float)($dados['toleranciaPeso'] ?? 0),
-
-            'descricao' => $dados['descricao'] ?? '',
-
-            'ativo' => true,
-
-            'imagem' => $imagem
-        ];
+    public function excluir(string $id): void
+    {
+        try {
+            $this->collection->deleteOne([
+                '_id' => new ObjectId($id)
+            ]);
+        } catch (\Exception) {
+            // ID inválido — nada a excluir
+        }
     }
 
     /**
@@ -137,32 +134,5 @@ class ProdutoRepository
         }
 
         return '/uploads/produtos/' . $nomeArquivo;
-    }
-
-    public function buscarPorId(int $id): ?array
-    {
-        foreach ($_SESSION['produtos'] as $produto) {
-
-            if ((int)$produto['id'] === $id) {
-                return $produto;
-            }
-        }
-
-        return null;
-    }
-
-    public function excluir(int $id): void
-    {
-        foreach ($_SESSION['produtos'] as $key => $produto) {
-
-            if ((int)$produto['id'] === $id) {
-
-                unset($_SESSION['produtos'][$key]);
-
-                $_SESSION['produtos'] = array_values($_SESSION['produtos']);
-
-                break;
-            }
-        }
     }
 }

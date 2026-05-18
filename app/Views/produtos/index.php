@@ -279,7 +279,7 @@ ob_start();
                             <?php
                             $p = (object) $produto;
 
-                            $tolerancia = (float)($p->toleranciaPeso ?? 0);
+                            $tolerancia = (float)($p->tolerancia ?? 0);
 
                             $ativo = (bool)($p->ativo ?? false);
 
@@ -357,7 +357,7 @@ ob_start();
 
                                     <span class="font-monospace">
 
-                                        <?= htmlspecialchars($p->codigoNfc ?? '-') ?>
+                                        <?= htmlspecialchars($p->codigo_nfc ?? '-') ?>
 
                                     </span>
                                 </td>
@@ -388,7 +388,7 @@ ob_start();
                                     <div class="d-flex justify-content-end gap-2">
 
                                         <!-- EDITAR -->
-                                        <a href="/?action=editar-produto&id=<?= (int)($p->id ?? 0) ?>"
+                                        <a href="/?action=editar-produto&id=<?= htmlspecialchars((string)($p->_id ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                                            class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none">
 
                                             Editar
@@ -401,7 +401,7 @@ ob_start();
 
                                             <input type="hidden"
                                                    name="id"
-                                                   value="<?= (int)($p->id ?? 0) ?>">
+                                                   value="<?= htmlspecialchars((string)($p->_id ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
                                             <button type="submit"
                                                     class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none"
@@ -508,7 +508,7 @@ ob_start();
 
                                     <span class="font-monospace">
 
-                                        <?= htmlspecialchars($p->codigoNfc ?? '-') ?>
+                                        <?= htmlspecialchars($p->codigo_nfc ?? '-') ?>
 
                                     </span>
                                 </div>
@@ -516,7 +516,7 @@ ob_start();
 
                             <div class="d-flex gap-2">
 
-                                <a href="/?action=editar-produto&id=<?= (int)($p->id ?? 0) ?>"
+                                <a href="/?action=editar-produto&id=<?= htmlspecialchars((string)($p->_id ?? ''), ENT_QUOTES, 'UTF-8') ?>"
                                    class="btn btn-sm rounded-3 text-white"
                                     style="background:#1e293b;border:none;">
 
@@ -530,7 +530,7 @@ ob_start();
 
                                     <input type="hidden"
                                            name="id"
-                                           value="<?= (int)($p->id ?? 0) ?>">
+                                           value="<?= htmlspecialchars((string)($p->_id ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
                                     <button type="submit"
                                             class="btn btn-outline-danger btn-sm w-100">

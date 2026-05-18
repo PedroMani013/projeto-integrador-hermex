@@ -105,4 +105,94 @@ class CaixaRepository
             throw new \RuntimeException('Falha ao persistir caixa no MongoDB.');
         }
     }
+
+    /**
+     * @throws \InvalidArgumentException se a caixa não existir, não estiver em estado 'criada', ou dados forem inválidos
+     * @throws \RuntimeException se a atualização falhar
+     */
+    public function adicionarNf(string $caixaId, array $dados): void
+    {
+        $caixa = $this->buscarPorId($caixaId);
+
+        if ($caixa === null) {
+            throw new \InvalidArgumentException('Caixa não encontrada.');
+        }
+
+        if ((string) $caixa['estado'] !== 'criada') {
+            throw new \InvalidArgumentException('Só é possível vincular NF a caixas em estado "criada".');
+        }
+
+        $numeroNf = trim($dados['numero_nf'] ?? '');
+        $clienteNome      = trim($dados['cliente_nome'] ?? '');
+        $clienteDocumento = trim($dados['cliente_documento'] ?? '');
+        $clienteCep       = preg_replace('/\D/', '', $dados['cliente_cep'] ?? '');
+        $clienteLogradouro = trim($dados['cliente_logradouro'] ?? '');
+        $clienteNumero    = trim($dados['cliente_numero'] ?? '');
+        $clienteBairro    = trim($dados['cliente_bairro'] ?? '');
+        $clienteCidade    = trim($dados['cliente_cidade'] ?? '');
+        $clienteUf        = strtoupper(trim($dados['cliente_uf'] ?? ''));
+
+        if ($numeroNf === '' || $clienteNome === '' || $clienteDocumento === '') {
+            throw new \InvalidArgumentException(
+                'Campos obrigatórios ausentes: número da NF, nome e documento do cliente são exigidos.'
+            );
+        }
+
+        $produtosRaw = $dados['produtos'] ?? [];
+        if (empty($produtosRaw) || !is_array($produtosRaw)) {
+            throw new \InvalidArgumentException('A NF deve conter ao menos um produto.');
+        }
+
+        $produtos   = [];
+        $totalItens = 0;
+
+        foreach ($produtosRaw as $p) {
+            $nome         = trim($p['nome'] ?? '');
+            $sku          = trim($p['sku'] ?? '');
+            $categoria    = trim($p['categoria'] ?? '');
+            $quantidade   = (int) ($p['quantidade'] ?? 0);
+            $pesoUnitario = (int) ($p['peso_unitario'] ?? 0);
+            $tolerancia   = (float) ($p['tolerancia'] ?? 0);
+
+            if ($nome === '' || $categoria === '' || $quantidade <= 0 || $pesoUnitario <= 0) {
+                throw new \InvalidArgumentException(
+                    'Cada produto deve ter nome, categoria, quantidade e peso unitário válidos.'
+                );
+            }
+
+            $produtos[]  = compact('nome', 'sku', 'categoria', 'quantidade', 'peso_unitario', 'tolerancia');
+            $totalItens += $quantidade;
+        }
+
+        $nf = [
+            'numero_nf'            => $numeroNf,
+            'cliente_destinatario' => [
+                'nome'      => $clienteNome,
+                'documento' => $clienteDocumento,
+                'endereco'  => [
+                    'cep'        => $clienteCep,
+                    'logradouro' => $clienteLogradouro,
+                    'numero'     => $clienteNumero,
+                    'bairro'     => $clienteBairro,
+                    'cidade'     => $clienteCidade,
+                    'uf'         => $clienteUf,
+                ],
+            ],
+            'produtos' => $produtos,
+        ];
+
+        $totalAtual = (int) ($caixa['total_itens'] ?? 0);
+
+        $resultado = $this->collection->updateOne(
+            ['_id' => new ObjectId($caixaId)],
+            [
+                '$push' => ['notas_fiscais' => $nf],
+                '$set'  => ['total_itens' => $totalAtual + $totalItens],
+            ]
+        );
+
+        if ($resultado->getModifiedCount() !== 1) {
+            throw new \RuntimeException('Falha ao vincular NF à caixa no MongoDB.');
+        }
+    }
 }

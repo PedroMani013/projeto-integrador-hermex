@@ -57,6 +57,12 @@ try {
         'salvar-caixa' =>
             salvarCaixa(),
 
+        'vincular-nf' =>
+            (new CaixaController())->vincularNf(),
+
+        'salvar-nf' =>
+            salvarNf(),
+
         /*
         |--------------------------------------------------------------------------
         | FILIAIS
@@ -152,6 +158,34 @@ function salvarCaixa(): void
     } catch (\Throwable $e) {
         $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
         header('Location: /?action=cadastro-caixa');
+    }
+
+    exit;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SALVAR NF
+|--------------------------------------------------------------------------
+*/
+function salvarNf(): void
+{
+    $caixaId = $_POST['caixa_id'] ?? '';
+
+    try {
+        $repository = new CaixaRepository();
+        $repository->adicionarNf($caixaId, $_POST);
+
+        $_SESSION['sucesso'] = 'Nota fiscal vinculada com sucesso!';
+        header('Location: /?action=caixas');
+
+    } catch (\InvalidArgumentException $e) {
+        $_SESSION['erro'] = $e->getMessage();
+        header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
+
+    } catch (\Throwable $e) {
+        $_SESSION['erro'] = 'Erro ao vincular NF. Tente novamente.';
+        header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
     }
 
     exit;

@@ -201,30 +201,6 @@ ob_start();
                                required>
                     </div>
 
-                    <!-- RESPONSÁVEL -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            Responsável
-                        </label>
-
-                        <input type="text"
-                               name="responsavel"
-                               class="form-control form-control-lg"
-                               placeholder="Nome do responsável">
-                    </div>
-
-                    <!-- TELEFONE -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold">
-                            Telefone
-                        </label>
-
-                        <input type="text"
-                               name="telefone"
-                               class="form-control form-control-lg"
-                               placeholder="(00) 00000-0000">
-                    </div>
-
                 </div>
 
                 <!-- BOTÕES -->

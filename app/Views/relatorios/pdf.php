@@ -61,27 +61,27 @@ th{
             <tr>
 
                 <td>
-                    <?= $relatorio['codigo'] ?? '-' ?>
+                    <?= htmlspecialchars($relatorio['codigo'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                 </td>
 
                 <td>
-                    <?= $relatorio['estado'] ?? '-' ?>
+                    <?= htmlspecialchars($relatorio['estado'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                 </td>
 
                 <td>
-                    <?= $relatorio['filial_origem_nome'] ?? '-' ?>
+                    <?= htmlspecialchars($relatorio['filial_origem_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                 </td>
 
                 <td>
-                    <?= $relatorio['filial_destino_nome'] ?? '-' ?>
+                    <?= htmlspecialchars($relatorio['filial_destino_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                 </td>
 
                 <td>
-                    <?= $relatorio['total_itens'] ?? 0 ?>
+                    <?= (int) ($relatorio['total_itens'] ?? 0) ?>
                 </td>
 
                 <td>
-                    <?= $relatorio['transportadora'] ?? '-' ?>
+                    <?= htmlspecialchars($relatorio['transportadora'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                 </td>
 
                 <td>

@@ -8,7 +8,6 @@ use App\Models\AlertaRecente;
 use App\Models\Caixa;
 use App\Models\Evento;
 use Config\DatabaseConnection;
-use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 class DashboardRepository
@@ -104,31 +103,20 @@ class DashboardRepository
     /** @return AlertaRecente[] */
     public function alertasRecentes(int $limite = 5): array
     {
-        $docs = $this->db->eventos->find(
-            ['$or' => [['peso_anomalo' => true], ['abertura_indevida' => true]]],
-            ['sort' => ['timestamp' => -1], 'limit' => $limite]
+        $docs = $this->db->caixas->find(
+            ['estado' => 'violada'],
+            ['sort' => ['ultimo_evento.timestamp' => -1], 'limit' => $limite]
         );
 
         $alertas = [];
         foreach ($docs as $doc) {
-            if (!isset($doc['caixa_id'])) {
-                continue;
-            }
-            $caixa = $this->db->caixas->findOne(['_id' => $doc['caixa_id']]);
-            if ($caixa === null) {
-                continue;
-            }
-
-            $titulo = $this->tituloAlerta((string) $doc['tipo'], (bool) ($doc['peso_anomalo'] ?? false), (bool) ($doc['abertura_indevida'] ?? false));
-            $nivel  = ((bool) ($doc['abertura_indevida'] ?? false)) ? 'critico' : 'anomalia';
-
             $alertas[] = new AlertaRecente(
-                caixaCodigo:   (string) $caixa['codigo'],
-                titulo:        $titulo,
-                filialOrigem:  (string) $caixa['filial_origem_codigo'],
-                filialDestino: (string) $caixa['filial_destino_codigo'],
-                nivel:         $nivel,
-                timestamp:     $this->toDateTime($doc['timestamp']),
+                caixaCodigo:   (string) ($doc['codigo'] ?? ''),
+                titulo:        'Anomalia detectada',
+                filialOrigem:  (string) ($doc['filial_origem_codigo'] ?? ''),
+                filialDestino: (string) ($doc['filial_destino_codigo'] ?? ''),
+                nivel:         'critico',
+                timestamp:     $this->toDateTime($doc['ultimo_evento']['timestamp'] ?? null),
             );
         }
         return $alertas;
@@ -209,14 +197,4 @@ class DashboardRepository
         return new \DateTimeImmutable();
     }
 
-    private function tituloAlerta(string $tipo, bool $pesoAnomalo, bool $aberturaIndevida): string
-    {
-        if ($aberturaIndevida && $pesoAnomalo) {
-            return 'Lacre aberto com variação de peso';
-        }
-        if ($aberturaIndevida) {
-            return 'Tampa aberta durante o trânsito';
-        }
-        return 'Peso fora da tolerância configurada';
-    }
 }

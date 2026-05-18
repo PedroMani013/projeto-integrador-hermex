@@ -169,23 +169,31 @@ class DashboardRepository
             );
         }
 
+        $nfs = [];
+        foreach (($doc['notas_fiscais'] ?? []) as $nf) {
+            $nfs[] = (array) $nf;
+        }
+
         return new Caixa(
-            id:                  (string) $doc['_id'],
-            codigo:              (string) $doc['codigo'],
-            tagNfc:              (string) ($doc['tag_nfc'] ?? ''),
-            estado:              (string) $doc['estado'],
-            notaFiscal:          (string) ($doc['nota_fiscal'] ?? ''),
-            totalItens:          (int)    ($doc['total_itens'] ?? 0),
-            pesoBaseline:        (float)  ($doc['peso_baseline'] ?? 0),
-            pesoAtual:           (float)  ($doc['peso_atual'] ?? 0),
-            filialOrigemCodigo:  (string) ($doc['filial_origem_codigo'] ?? ''),
-            filialDestinoCodigo: (string) ($doc['filial_destino_codigo'] ?? ''),
-            filialOrigemNome:    (string) ($doc['filial_origem_nome'] ?? ''),
-            filialDestinoNome:   (string) ($doc['filial_destino_nome'] ?? ''),
-            transportadora:      (string) ($doc['transportadora'] ?? ''),
-            previsaoChegada:     $this->toDateTime($doc['previsao_chegada']),
-            ultimoEvento:        $ultimoEvento,
-            criadoEm:            $this->toDateTime($doc['criado_em']),
+            id:                     (string) $doc['_id'],
+            codigo:                 (string) $doc['codigo'],
+            tagNfc:                 (string) ($doc['tag_nfc'] ?? ''),
+            estado:                 (string) $doc['estado'],
+            notasFiscais:           $nfs,
+            totalItens:             (int)    ($doc['total_itens'] ?? 0),
+            pesoBaseline:           (float)  ($doc['peso_baseline'] ?? 0),
+            pesoAtual:              (float)  ($doc['peso_atual'] ?? 0),
+            toleranciaEfetiva:      isset($doc['tolerancia_efetiva']) ? (float) $doc['tolerancia_efetiva'] : null,
+            anomaliaPesoIniciadaEm: $this->toDateTimeNullable($doc['anomalia_peso_iniciada_em'] ?? null),
+            lacradaEm:              $this->toDateTimeNullable($doc['lacrada_em'] ?? null),
+            filialOrigemCodigo:     (string) ($doc['filial_origem_codigo'] ?? ''),
+            filialDestinoCodigo:    (string) ($doc['filial_destino_codigo'] ?? ''),
+            filialOrigemNome:       (string) ($doc['filial_origem_nome'] ?? ''),
+            filialDestinoNome:      (string) ($doc['filial_destino_nome'] ?? ''),
+            transportadora:         (string) ($doc['transportadora'] ?? ''),
+            previsaoChegada:        $this->toDateTime($doc['previsao_chegada']),
+            ultimoEvento:           $ultimoEvento,
+            criadoEm:               $this->toDateTime($doc['criado_em']),
         );
     }
 
@@ -195,6 +203,14 @@ class DashboardRepository
             return \DateTimeImmutable::createFromMutable($v->toDateTime())->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
         }
         return new \DateTimeImmutable();
+    }
+
+    private function toDateTimeNullable(mixed $v): ?\DateTimeImmutable
+    {
+        if ($v instanceof UTCDateTime) {
+            return \DateTimeImmutable::createFromMutable($v->toDateTime())->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
+        }
+        return null;
     }
 
 }

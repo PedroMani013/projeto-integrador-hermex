@@ -25,7 +25,7 @@ class DashboardRepository
         return (int) $this->db->caixas->countDocuments(['estado' => 'em_transito']);
     }
 
-    public function contarAnomalias24h(): int
+    public function contarSinaisIsolados24h(): int
     {
         $limite = new UTCDateTime((time() - 86400) * 1000);
         return (int) $this->db->eventos->countDocuments([

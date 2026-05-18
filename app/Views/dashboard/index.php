@@ -131,9 +131,9 @@ ob_start();
                     aria-hidden="true"></canvas>
         </div>
         <div>
-            <p class="card-indicador-label">Anomalias em 24h</p>
-            <p class="card-indicador-valor" aria-label="<?= $indicadores['anomalias24h'] ?> anomalias nas últimas 24 horas">
-                <?= $indicadores['anomalias24h'] ?>
+            <p class="card-indicador-label">Sinais detectados (24h)</p>
+            <p class="card-indicador-valor" aria-label="<?= (int) ($indicadores['sinaisIsolados24h'] ?? 0) ?> sinais isolados nas últimas 24 horas">
+                <?= (int) ($indicadores['sinaisIsolados24h'] ?? 0) ?>
             </p>
         </div>
         <p class="card-indicador-comp">Nos últimos eventos registrados</p>

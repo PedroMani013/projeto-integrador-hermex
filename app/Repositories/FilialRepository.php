@@ -20,7 +20,6 @@ class FilialRepository
 
     public function listar(
         ?string $estado = null,
-        ?string $status = null,
         ?string $busca = null
     ): array {
 
@@ -28,10 +27,6 @@ class FilialRepository
 
         if (!empty($estado)) {
             $filtro['uf'] = $estado;
-        }
-
-        if (!empty($status)) {
-            $filtro['status'] = $status;
         }
 
         if (!empty($busca)) {
@@ -94,9 +89,6 @@ class FilialRepository
             'bairro'                 => trim($dados['bairro'] ?? ''),
             'numero'                 => trim($dados['numero'] ?? ''),
             'complemento'            => trim($dados['complemento'] ?? ''),
-            'responsavel'            => trim($dados['responsavel'] ?? ''),
-            'telefone'               => trim($dados['telefone'] ?? ''),
-            'status'                 => 'ativa',
             'latitude'               => null,
             'longitude'              => null,
             'geocodificacao_pendente' => true,

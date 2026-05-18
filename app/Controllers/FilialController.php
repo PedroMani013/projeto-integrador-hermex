@@ -18,12 +18,10 @@ class FilialController
     public function index(): void
     {
         $estado = $_GET['estado'] ?? null;
-        $status = $_GET['status'] ?? null;
         $busca  = $_GET['busca'] ?? null;
 
         $filiais = $this->repository->listar(
             $estado,
-            $status,
             $busca
         );
 

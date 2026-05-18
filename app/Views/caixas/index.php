@@ -1,0 +1,132 @@
+<?php
+
+declare(strict_types=1);
+
+$tituloPagina = 'Caixas';
+
+$estilos = [
+    '/assets/css/hermex_pages.css',
+    '/assets/css/dashboard.css',
+];
+
+$scripts = [];
+
+ob_start();
+?>
+
+<div class="container-fluid py-4 px-4">
+
+    <?php if (!empty($_SESSION['sucesso'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['sucesso'], ENT_QUOTES, 'UTF-8') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['sucesso']); ?>
+    <?php endif; ?>
+
+    <?php if (!empty($_SESSION['erro'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <?= htmlspecialchars($_SESSION['erro'], ENT_QUOTES, 'UTF-8') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php unset($_SESSION['erro']); ?>
+    <?php endif; ?>
+
+    <!-- HEADER -->
+    <div class="page-header">
+
+        <div>
+            <h1 class="page-title">Caixas</h1>
+            <p class="page-subtitle">Gerencie as caixas criadas e lacradas aguardando despacho.</p>
+        </div>
+
+        <a href="<?= BASE_URL ?>?action=cadastro-caixa"
+           class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none">
+            + Nova Caixa
+        </a>
+
+    </div>
+
+    <!-- TABELA -->
+    <div class="tabela-wrapper shadow-sm">
+
+        <table class="hermex-table align-middle">
+
+            <thead>
+                <tr>
+                    <th>CÓDIGO</th>
+                    <th>ROTA</th>
+                    <th>TRANSPORTADORA</th>
+                    <th class="text-center">ESTADO</th>
+                    <th class="text-end pe-4">AÇÕES</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php if (!empty($caixas)): ?>
+
+                    <?php foreach ($caixas as $caixa): ?>
+                        <tr>
+
+                            <td>
+                                <div class="fw-bold">
+                                    <?= htmlspecialchars((string) ($caixa['codigo'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                </div>
+                                <small class="text-secondary">
+                                    <?= htmlspecialchars((string) ($caixa['tag_nfc'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                </small>
+                            </td>
+
+                            <td>
+                                <div class="fw-semibold">
+                                    <?= htmlspecialchars((string) ($caixa['filial_origem_nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                    →
+                                    <?= htmlspecialchars((string) ($caixa['filial_destino_nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                </div>
+                            </td>
+
+                            <td>
+                                <?= htmlspecialchars((string) ($caixa['transportadora'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                            </td>
+
+                            <td class="text-center">
+                                <?php $estado = (string) ($caixa['estado'] ?? ''); ?>
+                                <span class="badge <?= $estado === 'lacrada' ? 'bg-success' : 'bg-secondary' ?>">
+                                    <?= $estado === 'lacrada' ? 'Lacrada' : 'Criada' ?>
+                                </span>
+                            </td>
+
+                            <td class="text-end pe-4">
+                                <?php if ($estado === 'criada'): ?>
+                                    <a href="<?= BASE_URL ?>?action=vincular-nf&id=<?= urlencode((string) ($caixa['_id'] ?? '')) ?>"
+                                       class="btn-hermex-primary d-inline-flex align-items-center gap-2 text-decoration-none">
+                                        Vincular NF
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+
+                        </tr>
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-secondary">
+                            Nenhuma caixa encontrada.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<?php
+$conteudo = ob_get_clean();
+
+require_once __DIR__ . '/../layouts/base.php';
+?>

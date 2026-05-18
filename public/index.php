@@ -19,11 +19,13 @@ session_start();
 
 require_once BASE_PATH . '/vendor/autoload.php';
 
+use App\Controllers\CaixaController;
 use App\Controllers\CategoriaController;
 use App\Controllers\DashboardController;
 use App\Controllers\FilialController;
 use App\Controllers\RelatorioController;
 
+use App\Repositories\CaixaRepository;
 use App\Repositories\CategoriaRepository;
 use App\Repositories\FilialRepository;
 
@@ -40,6 +42,20 @@ try {
         */
         'dashboard', '' =>
             (new DashboardController())->index(),
+
+        /*
+        |--------------------------------------------------------------------------
+        | CAIXAS
+        |--------------------------------------------------------------------------
+        */
+        'caixas' =>
+            (new CaixaController())->index(),
+
+        'cadastro-caixa' =>
+            (new CaixaController())->cadastro(),
+
+        'salvar-caixa' =>
+            salvarCaixa(),
 
         /*
         |--------------------------------------------------------------------------
@@ -113,6 +129,32 @@ try {
     print_r($e);
 
     echo '</pre>';
+}
+
+/*
+|--------------------------------------------------------------------------
+| SALVAR CAIXA
+|--------------------------------------------------------------------------
+*/
+function salvarCaixa(): void
+{
+    try {
+        $repository = new CaixaRepository();
+        $repository->salvar($_POST);
+
+        $_SESSION['sucesso'] = 'Caixa cadastrada com sucesso!';
+        header('Location: /?action=caixas');
+
+    } catch (\InvalidArgumentException $e) {
+        $_SESSION['erro'] = $e->getMessage();
+        header('Location: /?action=cadastro-caixa');
+
+    } catch (\Throwable $e) {
+        $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
+        header('Location: /?action=cadastro-caixa');
+    }
+
+    exit;
 }
 
 /*

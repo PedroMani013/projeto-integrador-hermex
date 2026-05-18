@@ -19,10 +19,12 @@ session_start();
 
 require_once BASE_PATH . '/vendor/autoload.php';
 
+use App\Controllers\CategoriaController;
 use App\Controllers\DashboardController;
 use App\Controllers\FilialController;
 use App\Controllers\RelatorioController;
 
+use App\Repositories\CategoriaRepository;
 use App\Repositories\FilialRepository;
 
 $action = $_GET['action'] ?? 'dashboard';
@@ -65,6 +67,20 @@ try {
 
         /*
         |--------------------------------------------------------------------------
+        | CATEGORIAS
+        |--------------------------------------------------------------------------
+        */
+        'categorias' =>
+            (new CategoriaController())->index(),
+
+        'cadastro-categoria' =>
+            require BASE_PATH . '/app/Views/categorias/cadastro-categoria.php',
+
+        'salvar-categoria' =>
+            salvarCategoria(),
+
+        /*
+        |--------------------------------------------------------------------------
         | RELATÓRIOS
         |--------------------------------------------------------------------------
         */
@@ -97,6 +113,32 @@ try {
     print_r($e);
 
     echo '</pre>';
+}
+
+/*
+|--------------------------------------------------------------------------
+| SALVAR CATEGORIA
+|--------------------------------------------------------------------------
+*/
+function salvarCategoria(): void
+{
+    try {
+        $repository = new CategoriaRepository();
+        $repository->salvar($_POST);
+
+        $_SESSION['sucesso'] = 'Categoria cadastrada com sucesso!';
+        header('Location: /?action=categorias');
+
+    } catch (\InvalidArgumentException $e) {
+        $_SESSION['erro'] = $e->getMessage();
+        header('Location: /?action=cadastro-categoria');
+
+    } catch (\Throwable $e) {
+        $_SESSION['erro'] = 'Erro ao salvar categoria. Tente novamente.';
+        header('Location: /?action=cadastro-categoria');
+    }
+
+    exit;
 }
 
 /*

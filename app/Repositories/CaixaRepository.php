@@ -107,6 +107,44 @@ class CaixaRepository
     }
 
     /**
+     * Atualiza campos editáveis da caixa.
+     * Campos congelados após o lacre não podem ser alterados.
+     *
+     * @throws \InvalidArgumentException se a caixa não existir ou campo congelado for alterado
+     * @throws \RuntimeException se a atualização falhar
+     */
+    public function atualizar(string $id, array $campos): void
+    {
+        $caixa = $this->buscarPorId($id);
+
+        if ($caixa === null) {
+            throw new \InvalidArgumentException('Caixa não encontrada.');
+        }
+
+        $estadosCongelados = ['lacrada', 'em_transito', 'entregue', 'violada'];
+        $camposCongelados  = ['transportadora', 'filial_origem_codigo', 'filial_destino_codigo', 'notas_fiscais'];
+
+        if (in_array((string) $caixa['estado'], $estadosCongelados, true)) {
+            foreach ($camposCongelados as $campo) {
+                if (array_key_exists($campo, $campos)) {
+                    throw new \LogicException(
+                        "O campo '{$campo}' não pode ser alterado após o lacre da caixa."
+                    );
+                }
+            }
+        }
+
+        $resultado = $this->collection->updateOne(
+            ['_id' => new ObjectId($id)],
+            ['$set' => $campos]
+        );
+
+        if ($resultado->getMatchedCount() === 0) {
+            throw new \RuntimeException('Falha ao atualizar caixa no MongoDB.');
+        }
+    }
+
+    /**
      * @throws \InvalidArgumentException se a caixa não existir, não estiver em estado 'criada', ou dados forem inválidos
      * @throws \RuntimeException se a atualização falhar
      */

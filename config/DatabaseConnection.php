@@ -20,8 +20,8 @@ class DatabaseConnection
         $host   = $_ENV['MONGO_HOST']   ?? getenv('MONGO_HOST') ?: 'localhost';
         $port   = $_ENV['MONGO_PORT']   ?? getenv('MONGO_PORT') ?: '27017';
         $dbName = $_ENV['MONGO_DB']     ?? getenv('MONGO_DB')   ?: 'hermex';
-        $user   = $_ENV['MONGO_USER']   ?? getenv('MONGO_USER') ?: '';
-        $pass   = $_ENV['MONGO_PASS']   ?? getenv('MONGO_PASS') ?: '';
+        $user   = $_ENV['MONGO_USER']   ?? getenv('MONGO_USER') ?: 'admin';
+        $pass   = $_ENV['MONGO_PASS']   ?? getenv('MONGO_PASS') ?: 'admin123';
 
         if ($user !== '' && $pass !== '') {
             $uri = "mongodb://{$user}:{$pass}@{$host}:{$port}/{$dbName}?authSource=admin";

@@ -110,34 +110,6 @@ ob_start();
 
                     </div>
 
-                    <!-- CEP -->
-                    <div class="col-lg-6">
-
-                        <label class="form-label small text-uppercase fw-bold text-secondary">
-                            Buscar CEP
-                        </label>
-
-                        <div class="input-group">
-
-                            <span class="input-group-text bg-light border-0 rounded-start-4">
-
-                                <span class="material-symbols-outlined">
-                                    search
-                                </span>
-
-                            </span>
-
-                            <input
-                                type="text"
-                                id="cep"
-                                class="form-control border-0 bg-light rounded-end-4"
-                                placeholder="Digite um CEP..."
-                            >
-
-                        </div>
-
-                    </div>
-
                     <!-- BUSCA -->
                     <div class="col-12">
 
@@ -180,12 +152,6 @@ ob_start();
         </div>
 
     </div>
-
-    <!-- RESULTADO CEP -->
-    <div
-        class="alert alert-primary rounded-4 shadow-sm d-none"
-        id="resultadoCep"
-    ></div>
 
     <!-- TABELA -->
     <div class="tabela-wrapper shadow-sm">
@@ -362,69 +328,6 @@ ob_start();
     </div>
 
 </div>
-
-<!-- VIA CEP -->
-<script>
-
-document.getElementById('cep').addEventListener('keyup', async function () {
-
-    let cep = this.value.replace(/\D/g, '');
-
-    if (cep.length !== 8) {
-        return;
-    }
-
-    let resultado = document.getElementById('resultadoCep');
-
-    resultado.classList.remove('d-none');
-
-    resultado.innerHTML = 'Buscando CEP...';
-
-    try {
-
-        let response = await fetch(
-            `https://viacep.com.br/ws/${cep}/json/`
-        );
-
-        let data = await response.json();
-
-        if (data.erro) {
-
-            resultado.classList.remove('alert-primary');
-            resultado.classList.add('alert-danger');
-
-            resultado.innerHTML = `
-                CEP não encontrado.
-            `;
-
-            return;
-        }
-
-        resultado.classList.remove('alert-danger');
-        resultado.classList.add('alert-primary');
-
-        resultado.innerHTML = `
-            <strong>Endereço encontrado:</strong><br>
-
-            ${data.logradouro}<br>
-            ${data.bairro}<br>
-            ${data.localidade} - ${data.uf}
-        `;
-
-    } catch (erro) {
-
-        resultado.classList.remove('alert-primary');
-        resultado.classList.add('alert-danger');
-
-        resultado.innerHTML = `
-            Erro ao consultar CEP.
-        `;
-
-    }
-
-});
-
-</script>
 
 <?php
 

@@ -173,27 +173,27 @@
                 <tr>
 
                     <td>
-                        <?= $relatorio['codigo'] ?? '-' ?>
+                        <?= htmlspecialchars($relatorio['codigo'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                     </td>
 
-                    <td class="<?= $estado ?>">
-                        <?= str_replace('_', ' ', ucfirst($estado)) ?>
-                    </td>
-
-                    <td>
-                        <?= $relatorio['filial_origem_nome'] ?? '-' ?>
+                    <td class="<?= htmlspecialchars($estado, ENT_QUOTES, 'UTF-8') ?>">
+                        <?= htmlspecialchars(str_replace('_', ' ', ucfirst($estado)), ENT_QUOTES, 'UTF-8') ?>
                     </td>
 
                     <td>
-                        <?= $relatorio['filial_destino_nome'] ?? '-' ?>
+                        <?= htmlspecialchars($relatorio['filial_origem_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                     </td>
 
                     <td>
-                        <?= $relatorio['total_itens'] ?? 0 ?>
+                        <?= htmlspecialchars($relatorio['filial_destino_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                     </td>
 
                     <td>
-                        <?= $relatorio['transportadora'] ?? '-' ?>
+                        <?= (int) ($relatorio['total_itens'] ?? 0) ?>
+                    </td>
+
+                    <td>
+                        <?= htmlspecialchars($relatorio['transportadora'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
                     </td>
 
                     <td>

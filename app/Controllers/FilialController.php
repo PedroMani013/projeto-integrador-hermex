@@ -1,27 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controllers;
 
 use App\Repositories\FilialRepository;
 
 class FilialController
 {
-    private FilialRepository $repository;
-
-    public function __construct()
-    {
-        $this->repository = new FilialRepository();
-    }
-
     public function index(): void
     {
+        $repository = new FilialRepository();
+
         $estado = $_GET['estado'] ?? null;
+        $status = $_GET['status'] ?? null;
         $busca  = $_GET['busca'] ?? null;
 
-        $filiais = $this->repository->listar(
+        $filiais = $repository->listar(
             $estado,
+            $status,
             $busca
         );
 

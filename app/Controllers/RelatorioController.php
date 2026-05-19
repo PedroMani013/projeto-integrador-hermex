@@ -38,7 +38,7 @@ class RelatorioController
 
             if (
                 ($relatorio['estado'] ?? '')
-                === 'violada'
+                !== 'em_transito'
             ) {
 
                 $alertas++;

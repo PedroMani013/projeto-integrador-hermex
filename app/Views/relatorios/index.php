@@ -67,7 +67,7 @@ ob_start();
 
             <input type="date"
                    name="data_inicio"
-                   value="<?= htmlspecialchars($_GET['data_inicio'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   value="<?= $_GET['data_inicio'] ?? '' ?>"
                    class="form-control rounded-3">
 
         </div>
@@ -76,7 +76,7 @@ ob_start();
 
             <input type="date"
                    name="data_fim"
-                   value="<?= htmlspecialchars($_GET['data_fim'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+                   value="<?= $_GET['data_fim'] ?? '' ?>"
                    class="form-control rounded-3">
 
         </div>
@@ -108,7 +108,7 @@ ob_start();
 
         </div>
 
-        <a href="<?= htmlspecialchars(BASE_URL . '?action=exportar-relatorio&periodo=' . ($_GET['periodo'] ?? 'semana') . '&data_inicio=' . ($_GET['data_inicio'] ?? '') . '&data_fim=' . ($_GET['data_fim'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+        <a href="<?= BASE_URL ?>?action=exportar-relatorio&periodo=<?= $_GET['periodo'] ?? 'semana' ?>&data_inicio=<?= $_GET['data_inicio'] ?? '' ?>&data_fim=<?= $_GET['data_fim'] ?? '' ?>"
            class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none">
 
             Exportar PDF
@@ -129,7 +129,7 @@ ob_start();
                 </p>
 
                 <p class="card-indicador-valor">
-                    <?= (int) $totalMovimentacoes ?>
+                    <?= $totalMovimentacoes ?>
                 </p>
 
             </div>
@@ -145,7 +145,7 @@ ob_start();
                 </p>
 
                 <p class="card-indicador-valor text-danger">
-                    <?= (int) $alertas ?>
+                    <?= $alertas ?>
                 </p>
 
             </div>
@@ -161,7 +161,7 @@ ob_start();
                 </p>
 
                 <p class="card-indicador-valor">
-                    <?= (int) $integridade ?>%
+                    <?= $integridade ?>%
                 </p>
 
             </div>
@@ -214,37 +214,37 @@ ob_start();
 
                         <td>
 
-                            <?= htmlspecialchars($relatorio['codigo'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
+                            <?= $relatorio['codigo'] ?? '-' ?>
 
                         </td>
 
                         <td>
 
-                            <?= htmlspecialchars(ucfirst($relatorio['estado'] ?? '-'), ENT_QUOTES, 'UTF-8') ?>
+                            <?= ucfirst($relatorio['estado'] ?? '-') ?>
 
                         </td>
 
                         <td>
 
-                            <?= htmlspecialchars($relatorio['filial_origem_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
+                            <?= $relatorio['filial_origem_nome'] ?? '-' ?>
 
                         </td>
 
                         <td>
 
-                            <?= htmlspecialchars($relatorio['filial_destino_nome'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
+                            <?= $relatorio['filial_destino_nome'] ?? '-' ?>
 
                         </td>
 
                         <td>
 
-                            <?= (int) ($relatorio['total_itens'] ?? 0) ?>
+                            <?= $relatorio['total_itens'] ?? 0 ?>
 
                         </td>
 
                         <td>
 
-                            <?= htmlspecialchars($relatorio['transportadora'] ?? '-', ENT_QUOTES, 'UTF-8') ?>
+                            <?= $relatorio['transportadora'] ?? '-' ?>
 
                         </td>
 

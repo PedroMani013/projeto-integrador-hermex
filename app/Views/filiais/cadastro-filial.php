@@ -11,8 +11,7 @@ $estilos = [
 ];
 
 $scripts = [
-    '/assets/js/bootstrap.bundle.min.js',
-    '/assets/js/cadastro-filial.js'
+    '/assets/js/bootstrap.bundle.min.js'
 ];
 
 ob_start();
@@ -61,14 +60,6 @@ ob_start();
         <!-- FORM -->
         <div class="card-body p-4">
 
-            <?php if (!empty($_SESSION['erro'])): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= htmlspecialchars($_SESSION['erro'], ENT_QUOTES, 'UTF-8') ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php unset($_SESSION['erro']); ?>
-            <?php endif; ?>
-
             <form method="POST" action="/?action=salvar-filial">
 
                 <div class="row g-4">
@@ -99,106 +90,79 @@ ob_start();
                                required>
                     </div>
 
-                    <!-- CEP -->
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold" for="cep">
-                            CEP
-                        </label>
-
-                        <div class="input-group">
-                            <input type="text"
-                                   id="cep"
-                                   name="cep"
-                                   class="form-control form-control-lg"
-                                   placeholder="00000-000"
-                                   maxlength="9"
-                                   required>
-                            <span class="input-group-text" id="cep-status" style="min-width:2.5rem;">
-                            </span>
-                        </div>
-                        <div id="cep-erro" class="form-text text-danger d-none"></div>
-                    </div>
-
-                    <!-- ENDEREÇO (logradouro) -->
-                    <div class="col-md-8">
-                        <label class="form-label fw-semibold" for="endereco">
-                            Logradouro
-                        </label>
-
-                        <input type="text"
-                               id="endereco"
-                               name="endereco"
-                               class="form-control form-control-lg"
-                               placeholder="Preenchido pelo CEP"
-                               required>
-                    </div>
-
-                    <!-- NÚMERO -->
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" for="numero">
-                            Número
-                        </label>
-
-                        <input type="text"
-                               id="numero"
-                               name="numero"
-                               class="form-control form-control-lg"
-                               placeholder="Nº">
-                    </div>
-
-                    <!-- COMPLEMENTO -->
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold" for="complemento">
-                            Complemento
-                        </label>
-
-                        <input type="text"
-                               id="complemento"
-                               name="complemento"
-                               class="form-control form-control-lg"
-                               placeholder="Apto, sala, bloco...">
-                    </div>
-
-                    <!-- BAIRRO -->
-                    <div class="col-md-5">
-                        <label class="form-label fw-semibold" for="bairro">
-                            Bairro
-                        </label>
-
-                        <input type="text"
-                               id="bairro"
-                               name="bairro"
-                               class="form-control form-control-lg"
-                               placeholder="Preenchido pelo CEP">
-                    </div>
-
                     <!-- CIDADE -->
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold" for="cidade">
+                        <label class="form-label fw-semibold">
                             Cidade
                         </label>
 
                         <input type="text"
-                               id="cidade"
                                name="cidade"
                                class="form-control form-control-lg"
-                               placeholder="Preenchida pelo CEP"
+                               placeholder="Cidade"
                                required>
                     </div>
 
-                    <!-- ESTADO (UF) -->
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold" for="uf">
-                            UF
+                    <!-- ESTADO -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            Estado
                         </label>
 
                         <input type="text"
-                               id="uf"
-                               name="uf"
+                               name="estado"
                                class="form-control form-control-lg"
-                               placeholder="SP"
-                               maxlength="2"
+                               placeholder="UF"
                                required>
+                    </div>
+
+                    <!-- CEP -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            CEP
+                        </label>
+
+                        <input type="text"
+                               name="cep"
+                               class="form-control form-control-lg"
+                               placeholder="00000-000">
+                    </div>
+
+                    <!-- ENDEREÇO -->
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">
+                            Endereço
+                        </label>
+
+                        <input type="text"
+                               name="endereco"
+                               class="form-control form-control-lg"
+                               placeholder="Rua, avenida, número..."
+                               required>
+                    </div>
+
+                    <!-- RESPONSÁVEL -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            Responsável
+                        </label>
+
+                        <input type="text"
+                               name="responsavel"
+                               class="form-control form-control-lg"
+                               placeholder="Nome do responsável">
+                    </div>
+
+                    <!-- TELEFONE -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            Telefone
+                        </label>
+
+                        <input type="text"
+                               name="telefone"
+                               class="form-control form-control-lg"
+                               placeholder="(00) 00000-0000">
                     </div>
 
                 </div>

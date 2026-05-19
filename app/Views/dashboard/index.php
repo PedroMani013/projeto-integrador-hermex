@@ -379,7 +379,7 @@ ob_start();
                     <div class="caixa-card-grid">
                         <div>
                             <div class="caixa-card-label">Nota fiscal</div>
-                            <div class="caixa-card-val"><?= htmlspecialchars($caixa->notaFiscal) ?></div>
+                            <div class="caixa-card-val"><?= htmlspecialchars($caixa->notasFiscais[0]['numero_nf'] ?? '-') ?></div>
                         </div>
                         <div>
                             <div class="caixa-card-label">Itens</div>

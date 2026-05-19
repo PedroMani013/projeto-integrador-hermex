@@ -301,8 +301,10 @@ ob_start();
                             <td>
                                 <div class="caixa-codigo"><?= htmlspecialchars($caixa->codigo) ?></div>
                                 <div class="caixa-nf">
-                                    NF <?= htmlspecialchars($caixa->notaFiscal) ?>
-                                    <span aria-hidden="true"> • </span>
+                                    <?php
+                                        $primeiraНф = $caixa->notasFiscais[0]['numero_nf'] ?? null;
+                                        echo $primeiraНф ? 'NF ' . htmlspecialchars($primeiraНф) . ' • ' : '';
+                                    ?>
                                     <?= $caixa->totalItens ?> itens
                                 </div>
                             </td>

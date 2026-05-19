@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use MongoDB\Client;
+use Config\DatabaseConnection;
 use MongoDB\Collection;
 use MongoDB\BSON\UTCDateTime;
 
@@ -14,13 +14,9 @@ class RelatorioRepository
 
     public function __construct()
     {
-        $client = new Client(
-            'mongodb://localhost:27017'
-        );
+        $db = DatabaseConnection::getInstance()->getDb();
 
-        $database = $client->hermex;
-
-        $this->collection = $database->caixas;
+        $this->collection = $db->caixas;
     }
 
     public function buscarPorPeriodo(

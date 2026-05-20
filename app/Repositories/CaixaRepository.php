@@ -144,6 +144,18 @@ class CaixaRepository
         }
     }
 
+    /** Retorna os últimos $limite eventos de uma caixa, do mais recente ao mais antigo. */
+    public function buscarEventos(string $id, int $limite = 50): array
+    {
+        $db = DatabaseConnection::getInstance()->getDb();
+        return $db->eventos
+            ->find(
+                ['caixa_id' => new ObjectId($id)],
+                ['sort' => ['timestamp' => -1], 'limit' => $limite]
+            )
+            ->toArray();
+    }
+
     /**
      * Lacra a caixa: captura peso baseline, calcula tolerancia_efetiva (min entre todos os produtos),
      * registra previsao_chegada e transiciona estado para 'lacrada'.

@@ -32,6 +32,36 @@ class CaixaController
         require BASE_PATH . '/app/Views/caixas/cadastro-caixa.php';
     }
 
+    public function detalhe(): void
+    {
+        $id    = $_GET['id'] ?? '';
+        $caixa = $this->repository->buscarPorId($id);
+
+        if ($caixa === null) {
+            http_response_code(404);
+            require BASE_PATH . '/app/Views/erros/404.php';
+            exit;
+        }
+
+        $eventos = $this->repository->buscarEventos($id, 50);
+
+        // série de peso para o gráfico (apenas eventos tipo 'peso', ordem cronológica)
+        $seriePeso = [];
+        foreach (array_reverse($eventos) as $ev) {
+            if ((string) ($ev['tipo'] ?? '') === 'peso') {
+                $ts = $ev['timestamp'] ?? null;
+                $seriePeso[] = [
+                    'ts'    => $ts instanceof \MongoDB\BSON\UTCDateTime
+                        ? $ts->toDateTime()->format('H:i d/m')
+                        : '',
+                    'valor' => (float) ($ev['valor'] ?? 0),
+                ];
+            }
+        }
+
+        require BASE_PATH . '/app/Views/caixas/detalhe.php';
+    }
+
     public function lacrar(): void
     {
         $id    = $_GET['id'] ?? '';

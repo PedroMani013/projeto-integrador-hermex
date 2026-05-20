@@ -58,6 +58,12 @@ try {
         'salvar-caixa' =>
             salvarCaixa(),
 
+        'detalhe-caixa' =>
+            (new CaixaController())->detalhe(),
+
+        'reconhecer-alerta' =>
+            reconhecerAlerta(),
+
         'lacrar-caixa' =>
             (new CaixaController())->lacrar(),
 
@@ -173,6 +179,40 @@ function salvarCaixa(): void
     } catch (\Throwable $e) {
         $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
         header('Location: /?action=cadastro-caixa');
+    }
+
+    exit;
+}
+
+/*
+|--------------------------------------------------------------------------
+| RECONHECER ALERTA (H25)
+|--------------------------------------------------------------------------
+*/
+function reconhecerAlerta(): void
+{
+    $caixaId = $_POST['caixa_id'] ?? '';
+
+    try {
+        $repository = new CaixaRepository();
+        $caixa = $repository->buscarPorId($caixaId);
+
+        if ($caixa === null || (string) $caixa['estado'] !== 'violada') {
+            throw new \InvalidArgumentException('Caixa não encontrada ou não está em estado "violada".');
+        }
+
+        $repository->atualizar($caixaId, ['estado' => 'em_transito']);
+
+        $_SESSION['sucesso'] = 'Alerta reconhecido. Caixa retornou para em trânsito.';
+        header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+
+    } catch (\InvalidArgumentException $e) {
+        $_SESSION['erro'] = $e->getMessage();
+        header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+
+    } catch (\Throwable $e) {
+        $_SESSION['erro'] = 'Erro ao reconhecer alerta.';
+        header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
     }
 
     exit;

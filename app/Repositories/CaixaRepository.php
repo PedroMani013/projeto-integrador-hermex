@@ -145,6 +145,76 @@ class CaixaRepository
     }
 
     /**
+     * Lacra a caixa: captura peso baseline, calcula tolerancia_efetiva (min entre todos os produtos),
+     * registra previsao_chegada e transiciona estado para 'lacrada'.
+     *
+     * @throws \InvalidArgumentException se a caixa não existir, não estiver em 'criada', ou não tiver NFs
+     * @throws \RuntimeException se a atualização falhar
+     */
+    public function lacrar(string $id, array $dados): void
+    {
+        $caixa = $this->buscarPorId($id);
+
+        if ($caixa === null) {
+            throw new \InvalidArgumentException('Caixa não encontrada.');
+        }
+
+        if ((string) $caixa['estado'] !== 'criada') {
+            throw new \InvalidArgumentException('Só é possível lacrar caixas em estado "criada".');
+        }
+
+        $nfs = (array) ($caixa['notas_fiscais'] ?? []);
+        if (empty($nfs)) {
+            throw new \InvalidArgumentException('A caixa deve ter ao menos uma nota fiscal vinculada antes do lacre.');
+        }
+
+        $pesoBaseline = (float) ($dados['peso_baseline'] ?? 0);
+        if ($pesoBaseline <= 0) {
+            throw new \InvalidArgumentException('Peso baseline deve ser maior que zero.');
+        }
+
+        $previsaoStr = trim($dados['previsao_chegada'] ?? '');
+        if ($previsaoStr === '') {
+            throw new \InvalidArgumentException('Previsão de chegada é obrigatória.');
+        }
+
+        // tolerancia_efetiva = min de todas as tolerâncias dos produtos (regra do produto mais sensível)
+        $tolerancias = [];
+        foreach ($nfs as $nf) {
+            $nfArr = (array) $nf;
+            foreach (($nfArr['produtos'] ?? []) as $produto) {
+                $prodArr = (array) $produto;
+                $t = (float) ($prodArr['tolerancia'] ?? 0);
+                if ($t > 0) {
+                    $tolerancias[] = $t;
+                }
+            }
+        }
+        $toleranciaEfetiva = empty($tolerancias) ? null : min($tolerancias);
+
+        $previsaoTs = strtotime($previsaoStr);
+        if ($previsaoTs === false) {
+            throw new \InvalidArgumentException('Formato de data inválido para previsão de chegada.');
+        }
+
+        $resultado = $this->collection->updateOne(
+            ['_id' => new ObjectId($id)],
+            ['$set' => [
+                'estado'               => 'lacrada',
+                'peso_baseline'        => $pesoBaseline,
+                'peso_atual'           => $pesoBaseline,
+                'tolerancia_efetiva'   => $toleranciaEfetiva,
+                'lacrada_em'           => new UTCDateTime(),
+                'previsao_chegada'     => new UTCDateTime($previsaoTs * 1000),
+            ]]
+        );
+
+        if ($resultado->getMatchedCount() === 0) {
+            throw new \RuntimeException('Falha ao lacrar caixa no MongoDB.');
+        }
+    }
+
+    /**
      * @throws \InvalidArgumentException se a caixa não existir, não estiver em estado 'criada', ou dados forem inválidos
      * @throws \RuntimeException se a atualização falhar
      */

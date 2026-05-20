@@ -57,6 +57,12 @@ try {
         'salvar-caixa' =>
             salvarCaixa(),
 
+        'lacrar-caixa' =>
+            (new CaixaController())->lacrar(),
+
+        'salvar-lacre' =>
+            salvarLacre(),
+
         'vincular-nf' =>
             (new CaixaController())->vincularNf(),
 
@@ -158,6 +164,34 @@ function salvarCaixa(): void
     } catch (\Throwable $e) {
         $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
         header('Location: /?action=cadastro-caixa');
+    }
+
+    exit;
+}
+
+/*
+|--------------------------------------------------------------------------
+| SALVAR LACRE
+|--------------------------------------------------------------------------
+*/
+function salvarLacre(): void
+{
+    $caixaId = $_POST['caixa_id'] ?? '';
+
+    try {
+        $repository = new CaixaRepository();
+        $repository->lacrar($caixaId, $_POST);
+
+        $_SESSION['sucesso'] = 'Caixa lacrada com sucesso!';
+        header('Location: /?action=caixas');
+
+    } catch (\InvalidArgumentException $e) {
+        $_SESSION['erro'] = $e->getMessage();
+        header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
+
+    } catch (\Throwable $e) {
+        $_SESSION['erro'] = 'Erro ao lacrar caixa. Tente novamente.';
+        header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
     }
 
     exit;

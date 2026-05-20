@@ -32,6 +32,20 @@ class CaixaController
         require BASE_PATH . '/app/Views/caixas/cadastro-caixa.php';
     }
 
+    public function lacrar(): void
+    {
+        $id    = $_GET['id'] ?? '';
+        $caixa = $this->repository->buscarPorId($id);
+
+        if ($caixa === null || (string) $caixa['estado'] !== 'criada') {
+            $_SESSION['erro'] = 'Caixa não encontrada ou não está em estado "criada".';
+            header('Location: /?action=caixas');
+            exit;
+        }
+
+        require BASE_PATH . '/app/Views/caixas/lacrar-caixa.php';
+    }
+
     public function vincularNf(): void
     {
         $id    = $_GET['id'] ?? '';

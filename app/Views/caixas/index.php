@@ -98,12 +98,30 @@ ob_start();
                             </td>
 
                             <td class="text-end pe-4">
-                                <?php if ($estado === 'criada'): ?>
-                                    <a href="<?= BASE_URL ?>?action=vincular-nf&id=<?= urlencode((string) ($caixa['_id'] ?? '')) ?>"
-                                       class="btn-hermex-primary d-inline-flex align-items-center gap-2 text-decoration-none">
-                                        Vincular NF
+                                <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+                                    <a href="<?= BASE_URL ?>?action=detalhe-caixa&id=<?= urlencode((string) ($caixa['_id'] ?? '')) ?>"
+                                       class="btn-hermex-secondary d-inline-flex align-items-center gap-2 text-decoration-none">
+                                        Ver
                                     </a>
-                                <?php endif; ?>
+
+                                    <?php if ($estado === 'criada'): ?>
+                                        <a href="<?= BASE_URL ?>?action=vincular-nf&id=<?= urlencode((string) ($caixa['_id'] ?? '')) ?>"
+                                           class="btn-hermex-primary d-inline-flex align-items-center gap-2 text-decoration-none">
+                                            Vincular NF
+                                        </a>
+
+                                        <?php $temNf = !empty((array) ($caixa['notas_fiscais'] ?? [])); ?>
+                                        <?php if ($temNf): ?>
+                                            <a href="<?= BASE_URL ?>?action=lacrar-caixa&id=<?= urlencode((string) ($caixa['_id'] ?? '')) ?>"
+                                               class="btn-hermex-primary d-inline-flex align-items-center gap-2 text-decoration-none"
+                                               style="background:#198754;border-color:#198754;">
+                                                Lacrar
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+                                </div>
                             </td>
 
                         </tr>

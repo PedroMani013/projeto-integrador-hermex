@@ -22,6 +22,7 @@ require_once BASE_PATH . '/vendor/autoload.php';
 use App\Controllers\CaixaController;
 use App\Controllers\CategoriaController;
 use App\Controllers\DashboardController;
+use App\Controllers\EventoController;
 use App\Controllers\FilialController;
 use App\Controllers\RelatorioController;
 
@@ -68,6 +69,14 @@ try {
 
         'salvar-nf' =>
             salvarNf(),
+
+        /*
+        |--------------------------------------------------------------------------
+        | API — EVENTOS (H04/H05/H06)
+        |--------------------------------------------------------------------------
+        */
+        'api-evento' =>
+            (new EventoController())->receberEvento(),
 
         /*
         |--------------------------------------------------------------------------

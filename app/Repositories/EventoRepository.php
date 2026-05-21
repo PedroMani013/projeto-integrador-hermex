@@ -7,6 +7,7 @@ namespace App\Repositories;
 use Config\DatabaseConnection;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
+use App\Repositories\CaixaRepository;
 
 class EventoRepository
 {
@@ -166,6 +167,46 @@ class EventoRepository
             ['_id' => new ObjectId($caixaId)],
             ['$set' => $setCaixa]
         );
+    }
+
+    /**
+     * Lookup por tag NFC — usado pela página mobile de recepção (H11).
+     * Valida que a caixa existe e está em_transito antes de registrar.
+     *
+     * @return array{ caixa_id: string, codigo: string }
+     * @throws \InvalidArgumentException se a tag não for encontrada ou caixa não estiver em trânsito
+     */
+    public function registrarNfcPorTag(string $tagNfc): array
+    {
+        $caixaRepo = new CaixaRepository();
+        $caixa     = $caixaRepo->buscarPorTagNfc($tagNfc);
+
+        if ($caixa === null) {
+            throw new \InvalidArgumentException("Nenhuma caixa encontrada com a tag NFC '{$tagNfc}'.");
+        }
+
+        $estado = (string) ($caixa['estado'] ?? '');
+        if ($estado === 'entregue') {
+            // entrega já registrada anteriormente — retorna sucesso idempotente
+            return [
+                'caixa_id' => (string) $caixa['_id'],
+                'codigo'   => (string) ($caixa['codigo'] ?? ''),
+                'ja_entregue' => true,
+            ];
+        }
+        if ($estado !== 'em_transito') {
+            throw new \InvalidArgumentException(
+                "Esta caixa não pode ser recebida (estado atual: {$estado})."
+            );
+        }
+
+        $caixaId = (string) $caixa['_id'];
+        $this->registrarNfc($caixaId);
+
+        return [
+            'caixa_id' => $caixaId,
+            'codigo'   => (string) ($caixa['codigo'] ?? ''),
+        ];
     }
 
     /** Retorna os últimos $limite eventos de uma caixa, do mais recente ao mais antigo. */

@@ -58,6 +58,9 @@ try {
         'salvar-caixa' =>
             salvarCaixa(),
 
+        'recepcao-nfc' =>
+            require BASE_PATH . '/app/Views/recepcao/nfc.php',
+
         'detalhe-caixa' =>
             (new CaixaController())->detalhe(),
 

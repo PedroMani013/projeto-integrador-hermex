@@ -27,17 +27,31 @@ class EventoController
         }
 
         $caixaId = trim($body['caixa_id'] ?? '');
+        $tagNfc  = trim($body['tag_nfc']  ?? '');
         $tipo    = trim($body['tipo'] ?? '');
 
-        if ($caixaId === '' || $tipo === '') {
+        // lookup por tag_nfc (H11) não exige caixa_id
+        $usandoTag = ($tagNfc !== '' && $tipo === 'nfc');
+
+        if (!$usandoTag && ($caixaId === '' || $tipo === '')) {
             http_response_code(400);
-            echo json_encode(['ok' => false, 'erro' => 'Campos caixa_id e tipo são obrigatórios.']);
+            echo json_encode(['ok' => false, 'erro' => 'Campos caixa_id e tipo são obrigatórios (ou tag_nfc com tipo=nfc).']);
             return;
         }
 
         $repository = new EventoRepository();
 
         try {
+
+            if ($usandoTag) {
+                $info = $repository->registrarNfcPorTag($tagNfc);
+                echo json_encode([
+                    'ok'          => true,
+                    'codigo'      => $info['codigo'],
+                    'ja_entregue' => $info['ja_entregue'] ?? false,
+                ]);
+                return;
+            }
 
             match ($tipo) {
                 'peso'  => $repository->registrarPeso($caixaId, (float) ($body['valor'] ?? 0)),

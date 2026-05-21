@@ -144,6 +144,12 @@ class CaixaRepository
         }
     }
 
+    /** Busca caixa pelo valor da tag NFC (campo tag_nfc). */
+    public function buscarPorTagNfc(string $tagNfc): ?object
+    {
+        return $this->collection->findOne(['tag_nfc' => $tagNfc]);
+    }
+
     /** Retorna os últimos $limite eventos de uma caixa, do mais recente ao mais antigo. */
     public function buscarEventos(string $id, int $limite = 50): array
     {

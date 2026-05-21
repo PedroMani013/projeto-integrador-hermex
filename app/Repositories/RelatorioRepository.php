@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use Config\DatabaseConnection;
+use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
 use MongoDB\BSON\UTCDateTime;
 
@@ -88,5 +89,33 @@ class RelatorioRepository
             return (array) $item;
 
         }, $resultado);
+    }
+
+    /**
+     * H24 — cadeia de custódia completa de uma caixa específica.
+     * Retorna null se a caixa não for encontrada.
+     *
+     * @return array{ caixa: array, eventos: array }|null
+     */
+    public function custodiaCompleta(string $codigo): ?array
+    {
+        $caixa = $this->collection->findOne(['codigo' => $codigo]);
+
+        if ($caixa === null) {
+            return null;
+        }
+
+        $db     = DatabaseConnection::getInstance()->getDb();
+        $eventos = $db->eventos
+            ->find(
+                ['caixa_id' => $caixa['_id']],
+                ['sort' => ['timestamp' => 1]]
+            )
+            ->toArray();
+
+        return [
+            'caixa'   => (array) $caixa,
+            'eventos' => array_map(fn($e) => (array) $e, $eventos),
+        ];
     }
 }

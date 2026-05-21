@@ -112,7 +112,18 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
                 <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
                 <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
             </svg>
-            Relatórios
+            Operacional
+        </a>
+
+        <a href="<?= BASE_URL ?>?action=relatorio-custodia"
+           class="sidebar-link <?= $actionAtual === 'relatorio-custodia' ? 'ativo' : '' ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            Custódia
         </a>
 
     </nav>

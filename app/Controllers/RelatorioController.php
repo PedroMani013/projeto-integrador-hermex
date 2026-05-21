@@ -61,6 +61,30 @@ class RelatorioController
             . '/app/Views/relatorios/index.php';
     }
 
+    public function custodia(): void
+    {
+        $repository = new RelatorioRepository();
+        $codigo     = trim($_GET['codigo'] ?? '');
+        $resultado  = $codigo !== '' ? $repository->custodiaCompleta($codigo) : null;
+
+        require BASE_PATH . '/app/Views/relatorios/custodia.php';
+    }
+
+    public function exportarCustodiaPdf(): void
+    {
+        $repository = new RelatorioRepository();
+        $codigo     = trim($_GET['codigo'] ?? '');
+        $resultado  = $codigo !== '' ? $repository->custodiaCompleta($codigo) : null;
+
+        ob_start();
+        require BASE_PATH . '/app/Views/relatorios/custodia-pdf.php';
+        $html = ob_get_clean();
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('custodia-' . ($codigo ?: 'hermex') . '.pdf', 'I');
+    }
+
     public function exportarPdf(): void
     {
         $repository = new RelatorioRepository();

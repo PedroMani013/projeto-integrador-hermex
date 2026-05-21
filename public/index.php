@@ -133,6 +133,9 @@ try {
         'relatorios' =>
             (new RelatorioController())->index(),
 
+        'relatorio-custodia' =>
+            (new RelatorioController())->custodia(),
+
         /*
         |--------------------------------------------------------------------------
         | EXPORTAR PDF
@@ -140,6 +143,9 @@ try {
         */
         'exportar-relatorio' =>
             (new RelatorioController())->exportarPdf(),
+
+        'exportar-custodia' =>
+            (new RelatorioController())->exportarCustodiaPdf(),
 
         /*
         |--------------------------------------------------------------------------

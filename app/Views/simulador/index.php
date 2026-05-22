@@ -129,14 +129,14 @@ ob_start();
                                     <?php endif; ?>
 
                                     <?php if ($estado === 'violada'): ?>
-                                        <a href="/?action=detalhe-caixa&id=<?= urlencode($cxId) ?>"
+                                        <a href="<?= BASE_URL ?>?action=detalhe-caixa&id=<?= urlencode($cxId) ?>"
                                            class="btn-hermex-secondary d-inline-flex align-items-center gap-1 text-decoration-none"
                                            style="color:#dc3545;border-color:#fca5a5;">
                                             Ver alerta
                                         </a>
                                     <?php endif; ?>
 
-                                    <a href="/?action=detalhe-caixa&id=<?= urlencode($cxId) ?>"
+                                    <a href="<?= BASE_URL ?>?action=detalhe-caixa&id=<?= urlencode($cxId) ?>"
                                        class="btn-hermex-secondary d-inline-flex align-items-center gap-1 text-decoration-none">
                                         Detalhe
                                     </a>

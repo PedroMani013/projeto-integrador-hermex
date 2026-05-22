@@ -47,7 +47,7 @@ ob_start();
         </p>
     </div>
     <div class="page-header-actions">
-        <a href="/?action=cadastro-caixa"
+        <a href="<?= BASE_URL ?>?action=cadastro-caixa"
            class="btn-hermex-primary text-decoration-none">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -79,7 +79,7 @@ ob_start();
     </div>
     <div class="faixa-alerta-acoes">
         <!-- HU15: quando a tela de alertas existir, redirecionar para /?action=alertas em vez de filtrar caixas -->
-        <a href="/?action=alertas" class="btn btn-sm btn-danger">
+        <a href="<?= BASE_URL ?>?action=alertas" class="btn btn-sm btn-danger">
             Ver alertas
         </a>
     </div>
@@ -213,7 +213,7 @@ ob_start();
     <section class="painel-card" aria-labelledby="titulo-alertas">
         <div class="painel-card-header">
             <h2 class="painel-card-titulo" id="titulo-alertas">Alertas recentes</h2>
-            <a href="/?action=alertas" class="link-muted">Ver todos</a>
+            <a href="<?= BASE_URL ?>?action=alertas" class="link-muted">Ver todos</a>
         </div>
         <div class="painel-card-body" style="padding: 0 20px;">
 
@@ -268,7 +268,7 @@ ob_start();
                 <?= $total ?>
             </span>
         </div>
-        <a href="/?action=caixas&estado=em_transito" class="link-muted">Ver todas</a>
+        <a href="<?= BASE_URL ?>?action=caixas&estado=em_transito" class="link-muted">Ver todas</a>
     </div>
 
     <?php if (empty($caixas)): ?>
@@ -421,7 +421,7 @@ ob_start();
             </span>
             <div class="paginacao-btns">
                 <?php if ($pagina > 1): ?>
-                    <a href="/?action=dashboard&pagina=<?= $pagina - 1 ?>"
+                    <a href="<?= BASE_URL ?>?action=dashboard&pagina=<?= $pagina - 1 ?>"
                        class="paginacao-btn"
                        aria-label="Página anterior">
                         ← Anterior
@@ -436,7 +436,7 @@ ob_start();
                 </span>
 
                 <?php if ($pagina < $totalPaginas): ?>
-                    <a href="/?action=dashboard&pagina=<?= $pagina + 1 ?>"
+                    <a href="<?= BASE_URL ?>?action=dashboard&pagina=<?= $pagina + 1 ?>"
                        class="paginacao-btn"
                        aria-label="Próxima página">
                         Próxima →

@@ -65,7 +65,7 @@ ob_start();
             </p>
         </div>
 
-        <a href="/?action=caixas" class="btn-hermex-secondary text-decoration-none d-inline-flex align-items-center gap-2">
+        <a href="<?= BASE_URL ?>?action=caixas" class="btn-hermex-secondary text-decoration-none d-inline-flex align-items-center gap-2">
             Voltar
         </a>
 

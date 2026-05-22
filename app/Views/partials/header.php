@@ -45,7 +45,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
             </svg>
         </button>
 
-        <a href="/?action=alertas"
+        <a href="<?= BASE_URL ?>?action=alertas"
            class="header-icon-btn text-decoration-none"
            aria-label="Notificações<?= $alertasAbertos > 0 ? " ({$alertasAbertos} alertas abertos)" : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"

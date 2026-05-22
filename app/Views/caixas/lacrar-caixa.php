@@ -36,7 +36,7 @@ ob_start();
                 → <?= htmlspecialchars((string) ($caixa['filial_destino_nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
             </p>
         </div>
-        <a href="/?action=caixas" class="btn-hermex-secondary text-decoration-none d-inline-flex align-items-center gap-2">
+        <a href="<?= BASE_URL ?>?action=caixas" class="btn-hermex-secondary text-decoration-none d-inline-flex align-items-center gap-2">
             Voltar
         </a>
     </div>

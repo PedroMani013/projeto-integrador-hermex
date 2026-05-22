@@ -42,7 +42,7 @@ $badgeClasse = match((string) ($caixaDoc['estado'] ?? '')) {
             <h1 class="page-title">Relatório de Custódia</h1>
             <p class="page-subtitle">Cadeia de custódia completa de uma caixa individual.</p>
         </div>
-        <a href="/?action=relatorios"
+        <a href="<?= BASE_URL ?>?action=relatorios"
            class="btn-hermex-secondary text-decoration-none d-inline-flex align-items-center gap-2">
             Operacional
         </a>

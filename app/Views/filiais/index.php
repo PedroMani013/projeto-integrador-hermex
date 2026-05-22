@@ -257,7 +257,7 @@ ob_start();
 
                                 <div class="d-flex justify-content-end gap-2">
 
-                                <a href="/?action=editar-filial&id=<?= urlencode((string) ($filial['_id'] ?? '')) ?>"
+                                <a href="<?= BASE_URL ?>?action=editar-filial&id=<?= urlencode((string) ($filial['_id'] ?? '')) ?>"
                                    class="btn-hermex-secondary d-inline-flex align-items-center gap-2 text-decoration-none">
                                     Editar
                                 </a>

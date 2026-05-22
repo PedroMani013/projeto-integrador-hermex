@@ -209,7 +209,7 @@ ob_start();
                     Filtrar
                 </button>
                 <?php if (!empty($filtrosAtivos)): ?>
-                    <a href="/?action=alertas" class="btn-hermex-secondary text-decoration-none">
+                    <a href="<?= BASE_URL ?>?action=alertas" class="btn-hermex-secondary text-decoration-none">
                         Limpar
                     </a>
                 <?php endif; ?>
@@ -326,7 +326,7 @@ ob_start();
                                 <?php endif; ?>
                             </td>
                             <td class="text-end pe-4">
-                                <a href="/?action=detalhe-caixa&id=<?= urlencode($id) ?>"
+                                <a href="<?= BASE_URL ?>?action=detalhe-caixa&id=<?= urlencode($id) ?>"
                                    class="btn-hermex-secondary text-decoration-none"
                                    aria-label="Ver detalhes da caixa <?= htmlspecialchars($codigo, ENT_QUOTES, 'UTF-8') ?>">
                                     Ver detalhes
@@ -382,7 +382,7 @@ ob_start();
                         </div>
                     </div>
                     <div class="mt-3">
-                        <a href="/?action=detalhe-caixa&id=<?= urlencode($id) ?>"
+                        <a href="<?= BASE_URL ?>?action=detalhe-caixa&id=<?= urlencode($id) ?>"
                            class="btn-hermex-secondary text-decoration-none w-100 justify-content-center">
                             Ver detalhes
                         </a>

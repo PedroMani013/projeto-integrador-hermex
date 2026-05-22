@@ -92,8 +92,16 @@ ob_start();
 
                             <td class="text-center">
                                 <?php $estado = (string) ($caixa['estado'] ?? ''); ?>
-                                <span class="badge <?= $estado === 'lacrada' ? 'bg-success' : 'bg-secondary' ?>">
-                                    <?= $estado === 'lacrada' ? 'Lacrada' : 'Criada' ?>
+                                <span class="badge <?= match($estado) {
+                                    'lacrada'     => 'bg-success',
+                                    'em_transito' => 'bg-primary',
+                                    default       => 'bg-secondary'
+                                } ?>">
+                                    <?= match($estado) {
+                                        'lacrada'     => 'Lacrada',
+                                        'em_transito' => 'Em trânsito',
+                                        default       => 'Criada'
+                                    } ?>
                                 </span>
                             </td>
 
@@ -119,6 +127,18 @@ ob_start();
                                                 Lacrar
                                             </a>
                                         <?php endif; ?>
+                                    <?php endif; ?>
+
+                                    <?php if ($estado === 'lacrada'): ?>
+                                        <form method="POST" action="/?action=despachar-caixa" class="m-0"
+                                              onsubmit="return confirm('Confirmar despacho? A caixa entrará em trânsito e o monitoramento será iniciado.')">
+                                            <input type="hidden" name="caixa_id" value="<?= htmlspecialchars((string) ($caixa['_id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+                                            <button type="submit"
+                                                    class="btn-hermex-primary d-inline-flex align-items-center gap-2"
+                                                    style="background:#0d6efd;border-color:#0d6efd;">
+                                                Despachar
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
 
                                 </div>

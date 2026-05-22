@@ -92,6 +92,34 @@ class CaixaController
         require BASE_PATH . '/app/Views/caixas/vincular-nf.php';
     }
 
+    public function despachar(): void
+    {
+        $caixaId = $_POST['caixa_id'] ?? '';
+
+        try {
+            $caixa = $this->repository->buscarPorId($caixaId);
+
+            if ($caixa === null || (string) $caixa['estado'] !== 'lacrada') {
+                throw new \InvalidArgumentException('Caixa não encontrada ou não está em estado "lacrada".');
+            }
+
+            $this->repository->atualizar($caixaId, ['estado' => 'em_transito']);
+
+            $_SESSION['sucesso'] = 'Caixa despachada. Monitoramento iniciado.';
+            header('Location: /?action=caixas');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=caixas');
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao despachar caixa. Tente novamente.';
+            header('Location: /?action=caixas');
+        }
+
+        exit;
+    }
+
     public function salvar(): void
     {
         try {
@@ -158,7 +186,16 @@ class CaixaController
 
     public function reconhecerAlerta(): void
     {
-        $caixaId = $_POST['caixa_id'] ?? '';
+        $caixaId        = $_POST['caixa_id'] ?? '';
+        $classificacao  = $_POST['classificacao'] ?? '';
+        $observacao     = trim($_POST['observacao'] ?? '');
+
+        $classificacoesValidas = [
+            'violacao_confirmada',
+            'conferencia_legitima_fora_de_ordem',
+            'investigacao_concluida_sem_violacao',
+            'outro',
+        ];
 
         try {
             $caixa = $this->repository->buscarPorId($caixaId);
@@ -167,9 +204,27 @@ class CaixaController
                 throw new \InvalidArgumentException('Caixa não encontrada ou não está em estado "violada".');
             }
 
-            $this->repository->atualizar($caixaId, ['estado' => 'em_transito']);
+            if (!in_array($classificacao, $classificacoesValidas, true)) {
+                throw new \InvalidArgumentException('Classificação inválida.');
+            }
 
-            $_SESSION['sucesso'] = 'Alerta reconhecido. Caixa retornou para em trânsito.';
+            if (mb_strlen($observacao) < 10) {
+                throw new \InvalidArgumentException('A observação deve ter pelo menos 10 caracteres.');
+            }
+
+            $reconhecimento = [
+                'classificacao' => $classificacao,
+                'observacao'    => $observacao,
+                'reconhecido_em' => new \MongoDB\BSON\UTCDateTime(),
+                'operador'      => $_SESSION['usuario'] ?? 'desconhecido',
+            ];
+
+            $this->repository->atualizar($caixaId, [
+                'alerta_reconhecido'   => true,
+                'ultimo_reconhecimento' => $reconhecimento,
+            ]);
+
+            $_SESSION['sucesso'] = 'Alerta reconhecido e registrado no histórico.';
             header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
 
         } catch (\InvalidArgumentException $e) {

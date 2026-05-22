@@ -71,19 +71,66 @@ ob_start();
 
     </div>
 
-    <!-- ALERTA ATIVO (H17/H18) -->
+    <!-- ALERTA ATIVO -->
     <?php if ($estado === 'violada'): ?>
-        <div class="alert alert-danger d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert">
-            <div>
-                <strong>Alerta ativo:</strong> esta caixa apresentou anomalia durante o transporte.
+        <?php $jaReconhecido = !empty($caixa['alerta_reconhecido']); ?>
+        <div class="alert <?= $jaReconhecido ? 'alert-warning' : 'alert-danger' ?> mb-4" role="alert">
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+                <div>
+                    <strong><?= $jaReconhecido ? 'Alerta reconhecido' : 'Alerta ativo' ?>:</strong>
+                    esta caixa apresentou anomalia detectada durante o transporte.
+                </div>
+                <?php if (!$jaReconhecido): ?>
+                    <button class="btn btn-danger btn-sm" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#formReconhecimento">
+                        Reconhecer alerta
+                    </button>
+                <?php endif; ?>
             </div>
-            <form method="POST" action="/?action=reconhecer-alerta" class="m-0">
-                <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
-                <button type="submit" class="btn-hermex-primary"
-                        onclick="return confirm('Reconhecer o alerta e retornar a caixa para em trânsito?')">
-                    Reconhecer alerta
-                </button>
-            </form>
+
+            <?php if ($jaReconhecido && !empty($caixa['ultimo_reconhecimento'])): ?>
+                <?php $rec = (array) $caixa['ultimo_reconhecimento']; ?>
+                <div class="small text-muted">
+                    Classificado como <strong><?= htmlspecialchars((string) ($rec['classificacao'] ?? ''), ENT_QUOTES, 'UTF-8') ?></strong>
+                    por <?= htmlspecialchars((string) ($rec['operador'] ?? ''), ENT_QUOTES, 'UTF-8') ?>.
+                    Obs.: <?= htmlspecialchars((string) ($rec['observacao'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!$jaReconhecido): ?>
+                <div class="collapse" id="formReconhecimento">
+                    <form method="POST" action="/?action=reconhecer-alerta" class="mt-3">
+                        <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Classificação <span class="text-danger">*</span></label>
+                            <select name="classificacao" class="form-select" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="violacao_confirmada">Violação confirmada</option>
+                                <option value="conferencia_legitima_fora_de_ordem">Conferência legítima fora de ordem (abriu antes de bipar)</option>
+                                <option value="investigacao_concluida_sem_violacao">Investigação concluída sem violação</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Observação <span class="text-danger">*</span></label>
+                            <textarea name="observacao" class="form-control" rows="3" minlength="10" required
+                                      placeholder="Descreva o resultado da investigação (mínimo 10 caracteres)..."></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">Confirmar reconhecimento</button>
+                            <button type="button" class="btn btn-outline-secondary"
+                                    data-bs-toggle="collapse" data-bs-target="#formReconhecimento">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            <?php endif; ?>
+
         </div>
     <?php endif; ?>
 

@@ -59,6 +59,9 @@ try {
         'salvar-lacre' =>
             (new CaixaController())->confirmarLacre(),
 
+        'despachar-caixa' =>
+            (new CaixaController())->despachar(),
+
         'vincular-nf' =>
             (new CaixaController())->vincularNf(),
 

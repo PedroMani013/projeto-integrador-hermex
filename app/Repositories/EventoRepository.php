@@ -77,9 +77,20 @@ class EventoRepository
             $setCaixa['anomalia_peso_iniciada_em'] = null;
         }
 
-        // peso anômalo em caixa em_transito → violada
+        // Regra B: anomalia persistindo por mais de 5 minutos contínuos → violada
         if ($pesoAnomalo && $estado === 'em_transito') {
-            $setCaixa['estado'] = 'violada';
+            $anomaliaIniciada = $setCaixa['anomalia_peso_iniciada_em']
+                ?? ($caixa['anomalia_peso_iniciada_em'] ?? null);
+
+            if ($anomaliaIniciada !== null) {
+                $iniciadaMs = $anomaliaIniciada instanceof UTCDateTime
+                    ? $anomaliaIniciada->toDateTime()->getTimestamp()
+                    : 0;
+                $persistenciaSeg = $agora->toDateTime()->getTimestamp() - $iniciadaMs;
+                if ($persistenciaSeg >= 5 * 60) {
+                    $setCaixa['estado'] = 'violada';
+                }
+            }
         }
 
         $this->caixas->updateOne(

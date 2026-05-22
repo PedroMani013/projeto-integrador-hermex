@@ -44,7 +44,7 @@ class CaixaRepository
      * @throws \InvalidArgumentException se campos obrigatórios estiverem ausentes ou tag NFC já estiver em uso
      * @throws \RuntimeException se a inserção falhar
      */
-    public function salvar(array $dados): void
+    public function salvar(array $dados): string
     {
         $codigo      = trim($dados['codigo'] ?? '');
         $tagNfc      = trim($dados['tag_nfc'] ?? '');
@@ -104,6 +104,8 @@ class CaixaRepository
         if ($resultado->getInsertedCount() !== 1) {
             throw new \RuntimeException('Falha ao persistir caixa no MongoDB.');
         }
+
+        return (string) $resultado->getInsertedId();
     }
 
     /**

@@ -26,8 +26,8 @@ class CaixaController
 
     public function cadastro(): void
     {
-        $filialRepo = new FilialRepository();
-        $filiais    = $filialRepo->listar();
+        $filiais    = (new FilialRepository())->listar();
+        $categorias = (new CategoriaRepository())->listar();
 
         require BASE_PATH . '/app/Views/caixas/cadastro-caixa.php';
     }
@@ -123,7 +123,8 @@ class CaixaController
     public function salvar(): void
     {
         try {
-            $this->repository->salvar($_POST);
+            $caixaId = $this->repository->salvar($_POST);
+            $this->repository->adicionarNf($caixaId, $_POST);
 
             $_SESSION['sucesso'] = 'Caixa cadastrada com sucesso!';
             header('Location: ' . BASE_URL . '?action=caixas');

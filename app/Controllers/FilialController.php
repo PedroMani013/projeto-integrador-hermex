@@ -27,4 +27,24 @@ class FilialController
 
         require BASE_PATH . '/app/Views/filiais/index.php';
     }
+
+    public function salvar(): void
+    {
+        try {
+            $this->repository->salvar($_POST);
+
+            $_SESSION['sucesso'] = 'Filial cadastrada com sucesso!';
+            header('Location: /?action=filiais');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=cadastro-filial');
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao salvar filial. Tente novamente.';
+            header('Location: /?action=cadastro-filial');
+        }
+
+        exit;
+    }
 }

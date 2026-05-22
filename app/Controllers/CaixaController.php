@@ -91,4 +91,96 @@ class CaixaController
 
         require BASE_PATH . '/app/Views/caixas/vincular-nf.php';
     }
+
+    public function salvar(): void
+    {
+        try {
+            $this->repository->salvar($_POST);
+
+            $_SESSION['sucesso'] = 'Caixa cadastrada com sucesso!';
+            header('Location: /?action=caixas');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=cadastro-caixa');
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
+            header('Location: /?action=cadastro-caixa');
+        }
+
+        exit;
+    }
+
+    public function confirmarLacre(): void
+    {
+        $caixaId = $_POST['caixa_id'] ?? '';
+
+        try {
+            $this->repository->lacrar($caixaId, $_POST);
+
+            $_SESSION['sucesso'] = 'Caixa lacrada com sucesso!';
+            header('Location: /?action=caixas');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao lacrar caixa. Tente novamente.';
+            header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
+        }
+
+        exit;
+    }
+
+    public function confirmarNf(): void
+    {
+        $caixaId = $_POST['caixa_id'] ?? '';
+
+        try {
+            $this->repository->adicionarNf($caixaId, $_POST);
+
+            $_SESSION['sucesso'] = 'Nota fiscal vinculada com sucesso!';
+            header('Location: /?action=caixas');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao vincular NF. Tente novamente.';
+            header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
+        }
+
+        exit;
+    }
+
+    public function reconhecerAlerta(): void
+    {
+        $caixaId = $_POST['caixa_id'] ?? '';
+
+        try {
+            $caixa = $this->repository->buscarPorId($caixaId);
+
+            if ($caixa === null || (string) $caixa['estado'] !== 'violada') {
+                throw new \InvalidArgumentException('Caixa não encontrada ou não está em estado "violada".');
+            }
+
+            $this->repository->atualizar($caixaId, ['estado' => 'em_transito']);
+
+            $_SESSION['sucesso'] = 'Alerta reconhecido. Caixa retornou para em trânsito.';
+            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao reconhecer alerta.';
+            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+        }
+
+        exit;
+    }
 }

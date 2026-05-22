@@ -21,4 +21,24 @@ class CategoriaController
 
         require BASE_PATH . '/app/Views/categorias/index.php';
     }
+
+    public function salvar(): void
+    {
+        try {
+            $this->repository->salvar($_POST);
+
+            $_SESSION['sucesso'] = 'Categoria cadastrada com sucesso!';
+            header('Location: /?action=categorias');
+
+        } catch (\InvalidArgumentException $e) {
+            $_SESSION['erro'] = $e->getMessage();
+            header('Location: /?action=cadastro-categoria');
+
+        } catch (\Throwable $e) {
+            $_SESSION['erro'] = 'Erro ao salvar categoria. Tente novamente.';
+            header('Location: /?action=cadastro-categoria');
+        }
+
+        exit;
+    }
 }

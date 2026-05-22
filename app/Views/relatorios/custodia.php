@@ -9,7 +9,9 @@ $estilos = [
     '/assets/css/hermex_pages.css',
 ];
 
-$scripts = [];
+$scripts = [
+    '/assets/js/bootstrap.bundle.min.js',
+];
 
 ob_start();
 
@@ -165,52 +167,59 @@ $badgeClasse = match((string) ($caixaDoc['estado'] ?? '')) {
                         <?php if (empty($nfs)): ?>
                             <p class="text-secondary">Nenhuma nota fiscal vinculada.</p>
                         <?php else: ?>
-                            <div class="accordion accordion-flush" id="accordionNfsCust">
-                                <?php foreach ($nfs as $i => $nf):
-                                    $nfArr   = (array) $nf;
-                                    $cliente = (array) ($nfArr['cliente_destinatario'] ?? []);
-                                    $produtos= (array) ($nfArr['produtos'] ?? []);
-                                    $colId   = 'cnf-' . $i;
-                                ?>
-                                    <div class="accordion-item border rounded-3 mb-2">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed rounded-3 fw-semibold"
-                                                    type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#<?= $colId ?>">
-                                                NF <?= htmlspecialchars((string) ($nfArr['numero_nf'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
-                                                <span class="ms-2 text-secondary fw-normal small">
-                                                    — <?= htmlspecialchars((string) ($cliente['nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
-                                                </span>
-                                            </button>
-                                        </h2>
-                                        <div id="<?= $colId ?>" class="accordion-collapse collapse">
-                                            <div class="accordion-body pt-2">
-                                                <table class="table table-sm table-bordered mb-0">
-                                                    <thead class="table-light">
+                            <?php foreach ($nfs as $i => $nf):
+                                $nfArr   = (array) $nf;
+                                $cliente = (array) ($nfArr['cliente_destinatario'] ?? []);
+                                $produtos= (array) ($nfArr['produtos'] ?? []);
+                                $colId   = 'cnf-' . $i;
+                            ?>
+                                <div class="border rounded-3 mb-2 overflow-hidden">
+                                    <button class="w-100 text-start px-3 py-2 fw-semibold bg-light border-0 d-flex justify-content-between align-items-center"
+                                            type="button"
+                                            onclick="toggleNf('<?= $colId ?>', this)">
+                                        <span>
+                                            NF <?= htmlspecialchars((string) ($nfArr['numero_nf'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                            <span class="ms-2 text-secondary fw-normal small">
+                                                — <?= htmlspecialchars((string) ($cliente['nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                                            </span>
+                                        </span>
+                                        <svg class="nf-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"/>
+                                        </svg>
+                                    </button>
+                                    <div id="<?= $colId ?>" style="display:none;">
+                                        <div class="p-2">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Produto</th>
+                                                        <th>SKU</th>
+                                                        <th>Categoria</th>
+                                                        <th class="text-end">Qtd</th>
+                                                        <th class="text-end">Peso unit.</th>
+                                                        <th class="text-end">Tol.%</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($produtos as $p):
+                                                        $pArr = (array) $p;
+                                                    ?>
                                                         <tr>
-                                                            <th>Produto</th>
-                                                            <th class="text-end">Qtd</th>
-                                                            <th class="text-end">Tol.%</th>
+                                                            <td><?= htmlspecialchars((string) ($pArr['nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+                                                            <td><code><?= htmlspecialchars((string) ($pArr['sku'] ?? '—'), ENT_QUOTES, 'UTF-8') ?></code></td>
+                                                            <td><?= htmlspecialchars((string) ($pArr['categoria'] ?? '—'), ENT_QUOTES, 'UTF-8') ?></td>
+                                                            <td class="text-end"><?= (int) ($pArr['quantidade'] ?? 0) ?></td>
+                                                            <td class="text-end"><?= number_format((int) ($pArr['peso_unitario'] ?? 0) / 1000, 3, ',', '.') ?> kg</td>
+                                                            <td class="text-end"><?= number_format((float) ($pArr['tolerancia'] ?? 0), 1, ',', '.') ?>%</td>
                                                         </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php foreach ($produtos as $p):
-                                                            $pArr = (array) $p;
-                                                        ?>
-                                                            <tr>
-                                                                <td><?= htmlspecialchars((string) ($pArr['nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
-                                                                <td class="text-end"><?= (int) ($pArr['quantidade'] ?? 0) ?></td>
-                                                                <td class="text-end"><?= number_format((float) ($pArr['tolerancia'] ?? 0), 1, ',', '.') ?></td>
-                                                            </tr>
-                                                        <?php endforeach; ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
-                            </div>
+                                </div>
+                            <?php endforeach; ?>
                         <?php endif; ?>
 
                     </div>
@@ -287,6 +296,20 @@ $badgeClasse = match((string) ($caixaDoc['estado'] ?? '')) {
     <?php endif; ?>
 
 </div>
+
+<script>
+function toggleNf(id, btn) {
+    var el = document.getElementById(id);
+    var chevron = btn.querySelector('.nf-chevron');
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        el.style.display = 'none';
+        chevron.style.transform = '';
+    }
+}
+</script>
 
 <?php
 $conteudo = ob_get_clean();

@@ -137,7 +137,7 @@ ob_start();
             <?php endif; ?>
         </div>
 
-        <form method="GET" action="/" class="alertas-filtros-form">
+        <form method="GET" action="<?= BASE_URL ?>" class="alertas-filtros-form">
             <input type="hidden" name="action" value="alertas">
 
             <div class="filtro-grupo">

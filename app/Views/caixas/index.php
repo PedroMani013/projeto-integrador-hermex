@@ -130,7 +130,7 @@ ob_start();
                                     <?php endif; ?>
 
                                     <?php if ($estado === 'lacrada'): ?>
-                                        <form method="POST" action="/?action=despachar-caixa" class="m-0"
+                                        <form method="POST" action="<?= BASE_URL ?>?action=despachar-caixa" class="m-0"
                                               onsubmit="return confirm('Confirmar despacho? A caixa entrará em trânsito e o monitoramento será iniciado.')">
                                             <input type="hidden" name="caixa_id" value="<?= htmlspecialchars((string) ($caixa['_id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                                             <button type="submit"

@@ -100,7 +100,7 @@ ob_start();
 
             <?php if (!$jaReconhecido): ?>
                 <div class="collapse" id="formReconhecimento">
-                    <form method="POST" action="/?action=reconhecer-alerta" class="mt-3">
+                    <form method="POST" action="<?= BASE_URL ?>?action=reconhecer-alerta" class="mt-3">
                         <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
 
                         <div class="mb-3">

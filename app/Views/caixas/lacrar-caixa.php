@@ -50,7 +50,7 @@ ob_start();
 
                     <h5 class="fw-bold mb-4">Dados do lacre</h5>
 
-                    <form method="POST" action="/?action=salvar-lacre">
+                    <form method="POST" action="<?= BASE_URL ?>?action=salvar-lacre">
 
                         <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
 

@@ -56,7 +56,7 @@ ob_start();
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form method="POST" action="/?action=atualizar-filial">
+            <form method="POST" action="<?= BASE_URL ?>?action=atualizar-filial">
 
                 <input type="hidden" name="id" value="<?= htmlspecialchars($filialId, ENT_QUOTES, 'UTF-8') ?>">
 

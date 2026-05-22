@@ -262,7 +262,7 @@ ob_start();
                                     Editar
                                 </a>
 
-                                <form method="POST" action="/?action=desativar-filial" class="m-0"
+                                <form method="POST" action="<?= BASE_URL ?>?action=desativar-filial" class="m-0"
                                       onsubmit="return confirm('Desativar esta filial? Ela não aparecerá mais nas listagens, mas o histórico de caixas é preservado.')">
 
                                     <input type="hidden" name="id"

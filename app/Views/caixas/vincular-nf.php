@@ -54,7 +54,7 @@ ob_start();
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form method="POST" action="/?action=salvar-nf">
+            <form method="POST" action="<?= BASE_URL ?>?action=salvar-nf">
                 <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
 
                 <!-- NÚMERO DA NF -->

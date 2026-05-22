@@ -25,7 +25,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
 
     <!-- busca -->
     <div class="header-search">
-        <form role="search" action="/?action=caixas" method="get">
+        <form role="search" action="<?= BASE_URL ?>?action=caixas" method="get">
             <input type="search"
                    name="busca"
                    placeholder="Buscar caixa, nota fiscal, filial"

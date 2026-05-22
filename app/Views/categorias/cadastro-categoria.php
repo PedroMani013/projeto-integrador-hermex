@@ -41,7 +41,7 @@ ob_start();
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form method="POST" action="/?action=salvar-categoria">
+            <form method="POST" action="<?= BASE_URL ?>?action=salvar-categoria">
 
                 <div class="row g-4">
 

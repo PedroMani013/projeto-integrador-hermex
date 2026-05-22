@@ -69,7 +69,7 @@ ob_start();
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form method="POST" action="/?action=salvar-filial">
+            <form method="POST" action="<?= BASE_URL ?>?action=salvar-filial">
 
                 <div class="row g-4">
 

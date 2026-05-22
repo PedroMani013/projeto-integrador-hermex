@@ -20,7 +20,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
 
     <!-- breadcrumb fixo em Dashboard; quando outras telas existirem, tornar dinâmico com base na rota atual -->
     <nav class="header-breadcrumb" aria-label="Localização atual">
-        hermeX <span aria-hidden="true"> / </span> <strong>Dashboard</strong>
+        HermeX <span aria-hidden="true"> / </span> <strong>Dashboard</strong>
     </nav>
 
     <!-- busca -->

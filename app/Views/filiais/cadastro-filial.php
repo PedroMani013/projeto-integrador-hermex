@@ -29,7 +29,7 @@ ob_start();
             </h1>
 
             <p class="text-secondary mb-0">
-                Cadastre as unidades logísticas da hermeX
+                Cadastre as unidades logísticas da HermeX
             </p>
         </div>
 

@@ -6,12 +6,12 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
 <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
 
     <!-- logo simplificada -->
-    <a href="<?= BASE_URL ?>" class="sidebar-logo" aria-label="hermeX — ir para o dashboard">
+    <a href="<?= BASE_URL ?>" class="sidebar-logo" aria-label="HermeX — ir para o dashboard">
         <img src="<?= BASE_URL ?>assets/img/logo-hermex.svg"
-             alt="Logo hermeX — ícone de caixa com escudo"
+             alt="Logo HermeX — ícone de caixa com escudo"
              width="40" height="40">
         <span class="sidebar-logo-text">
-            <span class="sidebar-logo-name">hermeX</span>
+            <span class="sidebar-logo-name">HermeX</span>
             <span class="sidebar-logo-sub">Chain of Custody</span>
         </span>
     </a>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Recepção NFC — hermeX</title>
+    <title>Recepção NFC — HermeX</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
@@ -87,7 +87,7 @@
 
 <div class="recepcao-card">
 
-    <div class="logo-texto">hermeX</div>
+    <div class="logo-texto">HermeX</div>
     <div style="color:#888;font-size:13px;margin-bottom:4px;">Recepção de carga</div>
 
     <div class="nfc-icone" id="iconeNfc">📡</div>

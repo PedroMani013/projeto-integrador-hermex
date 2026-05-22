@@ -1,6 +1,6 @@
 {
     "name": "hermex/sistema",
-    "description": "hermeX - Sistema de Monitoramento de Cadeia de Custódia de Cargas",
+    "description": "HermeX - Sistema de Monitoramento de Cadeia de Custódia de Cargas",
     "type": "project",
     "require": {
         "php": ">=8.0",

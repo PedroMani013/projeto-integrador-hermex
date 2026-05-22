@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="hermeX — Monitoramento de cadeia de custódia de cargas em trânsito">
-    <title><?= htmlspecialchars($tituloPagina ?? 'Dashboard') ?> — hermeX</title>
+    <meta name="description" content="HermeX — Monitoramento de cadeia de custódia de cargas em trânsito">
+    <title><?= htmlspecialchars($tituloPagina ?? 'Dashboard') ?> — HermeX</title>
 
     <!-- bootstrap 5 -->
     <link rel="stylesheet"

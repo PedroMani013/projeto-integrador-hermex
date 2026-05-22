@@ -18,7 +18,11 @@
 
     <!-- CSS específico da página -->
     <?php foreach ($estilos ?? [] as $css): ?>
-        <link rel="stylesheet" href="<?= BASE_URL . ltrim(htmlspecialchars($css), '/') ?>">
+        <?php
+        $cssPath = BASE_PATH . '/public/' . ltrim($css, '/');
+        $v = file_exists($cssPath) ? filemtime($cssPath) : time();
+        ?>
+        <link rel="stylesheet" href="<?= BASE_URL . ltrim(htmlspecialchars($css), '/') ?>?v=<?= $v ?>">
     <?php endforeach; ?>
 </head>
 <body>
@@ -48,7 +52,11 @@
 
 <!-- scripts específicos da página -->
 <?php foreach ($scripts ?? [] as $js): ?>
-    <script src="<?= BASE_URL . ltrim(htmlspecialchars($js), '/') ?>"></script>
+    <?php
+    $jsPath = BASE_PATH . '/public/' . ltrim($js, '/');
+    $v = file_exists($jsPath) ? filemtime($jsPath) : time();
+    ?>
+    <script src="<?= BASE_URL . ltrim(htmlspecialchars($js), '/') ?>?v=<?= $v ?>"></script>
 <?php endforeach; ?>
 
 </body>

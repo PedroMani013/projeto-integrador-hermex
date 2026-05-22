@@ -121,4 +121,127 @@
     // adiciona primeira linha automaticamente
     document.getElementById('produtos-lista').appendChild(criarLinhaProduto());
 
+    // Importação de NF-e XML
+    const btnImportar = document.getElementById('btn-importar-xml');
+    const inputXml    = document.getElementById('input-xml-nfe');
+    const xmlStatus   = document.getElementById('xml-status');
+
+    if (btnImportar && inputXml) {
+        btnImportar.addEventListener('click', () => inputXml.click());
+
+        inputXml.addEventListener('change', () => {
+            const file = inputXml.files[0];
+            if (!file) return;
+
+            xmlStatus.textContent = 'Lendo arquivo…';
+            xmlStatus.className = 'text-secondary small mt-2';
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    preencherComXml(e.target.result);
+                    xmlStatus.textContent = '✓ NF-e importada com sucesso.';
+                    xmlStatus.className = 'text-success small mt-2';
+                } catch (err) {
+                    xmlStatus.textContent = '✗ ' + err.message;
+                    xmlStatus.className = 'text-danger small mt-2';
+                }
+                inputXml.value = '';
+            };
+            reader.onerror = () => {
+                xmlStatus.textContent = '✗ Erro ao ler o arquivo.';
+                xmlStatus.className = 'text-danger small mt-2';
+            };
+            reader.readAsText(file, 'UTF-8');
+        });
+    }
+
+    function preencherComXml(xmlString) {
+        const parser = new DOMParser();
+        const doc    = parser.parseFromString(xmlString, 'application/xml');
+
+        if (doc.querySelector('parsererror')) {
+            throw new Error('Arquivo XML inválido.');
+        }
+
+        // helper: busca tag ignorando namespace
+        function tag(el, nome) {
+            return el.querySelector(nome) || el.getElementsByTagName(nome)[0] || null;
+        }
+        function texto(el, nome) {
+            const node = tag(el, nome);
+            return node ? node.textContent.trim() : '';
+        }
+
+        const nfeProc = tag(doc, 'nfeProc') || tag(doc, 'NFe');
+        if (!nfeProc) throw new Error('Estrutura NF-e não reconhecida.');
+
+        // Número da NF
+        const nNF = texto(doc, 'nNF');
+        const serie = texto(doc, 'serie');
+        if (nNF) {
+            const numNf = serie ? `${serie}/${nNF}` : nNF;
+            const campoNumero = document.getElementById('numero_nf');
+            if (campoNumero) campoNumero.value = numNf;
+        }
+
+        // Destinatário
+        const dest = tag(doc, 'dest');
+        if (dest) {
+            const nome = texto(dest, 'xNome');
+            const cnpj = texto(dest, 'CNPJ') || texto(dest, 'CPF');
+            const end  = tag(dest, 'enderDest');
+
+            const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+
+            set('cliente_nome',      nome);
+            set('cliente_documento', cnpj);
+
+            if (end) {
+                set('cliente_logradouro', texto(end, 'xLgr'));
+                set('cliente_numero',     texto(end, 'nro'));
+                set('cliente_bairro',     texto(end, 'xBairro'));
+                set('cliente_cidade',     texto(end, 'xMun'));
+                set('cliente_uf',         texto(end, 'UF'));
+
+                const cep = texto(end, 'CEP').replace(/\D/g, '');
+                if (cep.length === 8) {
+                    const cepEl = document.getElementById('cliente_cep');
+                    if (cepEl) cepEl.value = cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+                }
+            }
+        }
+
+        // Produtos (itens da NF-e: tag <det>)
+        const itens = doc.querySelectorAll ? doc.querySelectorAll('det') : doc.getElementsByTagName('det');
+        if (!itens || itens.length === 0) throw new Error('Nenhum item (det) encontrado na NF-e.');
+
+        // limpa linhas existentes
+        document.getElementById('produtos-lista').innerHTML = '';
+        indiceProduto = 0;
+
+        itens.forEach(det => {
+            const prod    = tag(det, 'prod');
+            if (!prod) return;
+
+            const nome    = texto(prod, 'xProd');
+            const sku     = texto(prod, 'cProd');
+            const qtd     = parseFloat(texto(prod, 'qCom') || texto(prod, 'qTrib') || '1') || 1;
+
+            // Peso: NF-e usa pesoL/pesoB em kg por unidade — converte para gramas
+            const pesoLiq = parseFloat(texto(prod, 'pesoL') || '0');
+            const pesoBru = parseFloat(texto(prod, 'pesoB') || '0');
+            const pesoKg  = pesoLiq > 0 ? pesoLiq : pesoBru;
+            const pesoGramas = pesoKg > 0 ? Math.round((pesoKg / qtd) * 1000) : 0;
+
+            const linha = criarLinhaProduto();
+            linha.querySelector(`[name$="[nome]"]`).value        = nome;
+            linha.querySelector(`[name$="[sku]"]`).value         = sku;
+            linha.querySelector(`[name$="[quantidade]"]`).value  = Math.round(qtd);
+            linha.querySelector(`[name$="[peso_unitario]"]`).value = pesoGramas || '';
+
+            document.getElementById('produtos-lista').appendChild(linha);
+        });
+    }
+
 })();

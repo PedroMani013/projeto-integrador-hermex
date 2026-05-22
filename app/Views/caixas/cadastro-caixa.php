@@ -112,12 +112,26 @@ ob_start();
 
             <div class="card-body p-4">
 
-                <div class="row g-4 mb-4">
+                <div class="row g-4 mb-4 align-items-end">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="numero_nf">Número da NF</label>
                         <input type="text" id="numero_nf" name="numero_nf"
                                class="form-control form-control-lg"
                                placeholder="Ex: NF-12345" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="file" id="input-xml-nfe" accept=".xml" style="display:none;" aria-hidden="true">
+                        <button type="button" id="btn-importar-xml"
+                                class="btn btn-outline-primary d-inline-flex align-items-center gap-2 fw-semibold" style="height:48px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Importar NF-e XML
+                        </button>
+                        <div id="xml-status" class="small mt-1"></div>
                     </div>
                 </div>
 
@@ -195,7 +209,7 @@ ob_start();
 
                 <div id="produtos-lista"></div>
 
-                <button type="button" id="btn-adicionar-produto" class="btn btn-outline-secondary mt-2">
+                <button type="button" id="btn-adicionar-produto" class="btn btn-outline-primary fw-semibold mt-2">
                     + Adicionar Produto
                 </button>
 

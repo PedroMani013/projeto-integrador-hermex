@@ -19,6 +19,7 @@ session_start();
 
 require_once BASE_PATH . '/vendor/autoload.php';
 
+use App\Controllers\AlertaController;
 use App\Controllers\CaixaController;
 use App\Controllers\CategoriaController;
 use App\Controllers\DashboardController;
@@ -67,6 +68,9 @@ try {
 
         'salvar-nf' =>
             (new CaixaController())->confirmarNf(),
+
+        'alertas' =>
+            (new AlertaController())->index(),
 
         'api-evento' =>
             (new EventoController())->receberEvento(),

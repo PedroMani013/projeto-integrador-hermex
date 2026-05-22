@@ -84,6 +84,15 @@ try {
         'salvar-filial' =>
             (new FilialController())->salvar(),
 
+        'editar-filial' =>
+            (new FilialController())->editar(),
+
+        'atualizar-filial' =>
+            (new FilialController())->salvarEdicao(),
+
+        'desativar-filial' =>
+            (new FilialController())->desativar(),
+
         'categorias' =>
             (new CategoriaController())->index(),
 

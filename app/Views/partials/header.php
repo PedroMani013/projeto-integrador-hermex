@@ -36,7 +36,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
 
     <!-- ações -->
     <div class="header-actions">
-        <button class="header-icon-btn" aria-label="Atualizar dados" type="button" id="btnAtualizar">
+        <button class="header-icon-btn" aria-label="Atualizar dados" type="button" id="btnAtualizar" onclick="location.reload()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
@@ -45,7 +45,9 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
             </svg>
         </button>
 
-        <button class="header-icon-btn" aria-label="Notificações<?= $alertasAbertos > 0 ? " ({$alertasAbertos} alertas abertos)" : '' ?>" type="button">
+        <a href="/?action=alertas"
+           class="header-icon-btn text-decoration-none"
+           aria-label="Notificações<?= $alertasAbertos > 0 ? " ({$alertasAbertos} alertas abertos)" : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
@@ -55,7 +57,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
             <?php if ($alertasAbertos > 0): ?>
                 <span class="notif-dot" aria-hidden="true"></span>
             <?php endif; ?>
-        </button>
+        </a>
     </div>
 
 </header>

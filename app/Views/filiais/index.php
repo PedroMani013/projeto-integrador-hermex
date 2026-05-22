@@ -257,46 +257,24 @@ ob_start();
 
                                 <div class="d-flex justify-content-end gap-2">
 
-                                    <!-- EDITAR -->
-                                    <a
-                                        href="/?action=editar-filial&id=<?= urlencode((string)($filial['_id'] ?? $filial['id'] ?? '')) ?>"
-                                        class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none"
-                                        title="Editar filial"
-                                    >
+                                <a href="/?action=editar-filial&id=<?= urlencode((string) ($filial['_id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn-hermex-secondary d-inline-flex align-items-center gap-2 text-decoration-none">
+                                    Editar
+                                </a>
 
-                                        <span class="material-symbols-outlined">
-                                            Editar
-                                        </span>
+                                <form method="POST" action="/?action=desativar-filial" class="m-0"
+                                      onsubmit="return confirm('Desativar esta filial? Ela não aparecerá mais nas listagens, mas o histórico de caixas é preservado.')">
 
-                                    </a>
+                                    <input type="hidden" name="id"
+                                           value="<?= htmlspecialchars((string) ($filial['_id'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
 
-                                    <!-- EXCLUIR -->
-                                    <form
-                                        method="POST"
-                                        action="/?action=excluir-filial"
-                                        onsubmit="return confirm('Deseja excluir esta filial?')"
-                                    >
+                                    <button type="submit"
+                                            class="btn-hermex-secondary d-inline-flex align-items-center gap-2"
+                                            style="color:#dc3545;border-color:#fca5a5;">
+                                        Desativar
+                                    </button>
 
-                                        <input
-                                            type="hidden"
-                                            name="id"
-                                            value="<?= htmlspecialchars((string)($filial['_id'] ?? $filial['id'] ?? '')) ?>"
-                                        >
-
-                                        <button
-                                            type="submit"
-                                            class="btn-hermex-primary d-flex align-items-center gap-2 text-decoration-none"
-                                            style="background:#dc3545;border-color:#dc3545;color:#fff;"
-                                            title="Excluir filial"
-                                        >
-
-                                            <span class="material-symbols-outlined">
-                                                Excluir
-                                            </span>
-
-                                        </button>
-
-                                    </form>
+                                </form>
 
                                 </div>
 

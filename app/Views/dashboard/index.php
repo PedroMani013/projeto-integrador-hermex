@@ -47,15 +47,15 @@ ob_start();
         </p>
     </div>
     <div class="page-header-actions">
-        <!-- HU01: conectar ao formulário/modal de cadastro de caixa quando implementado -->
-        <button class="btn-hermex-primary" type="button">
+        <a href="/?action=cadastro-caixa"
+           class="btn-hermex-primary text-decoration-none">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Nova caixa
-        </button>
+        </a>
     </div>
 </div>
 
@@ -79,7 +79,7 @@ ob_start();
     </div>
     <div class="faixa-alerta-acoes">
         <!-- HU15: quando a tela de alertas existir, redirecionar para /?action=alertas em vez de filtrar caixas -->
-        <a href="/?action=caixas&estado=violada" class="btn btn-sm btn-danger">
+        <a href="/?action=alertas" class="btn btn-sm btn-danger">
             Ver alertas
         </a>
     </div>

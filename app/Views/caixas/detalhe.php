@@ -83,7 +83,7 @@ ob_start();
                 </div>
                 <?php if (!$jaReconhecido): ?>
                     <button class="btn btn-danger btn-sm" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#formReconhecimento">
+                            onclick="document.getElementById('formReconhecimento').style.display='block';this.style.display='none';">
                         Reconhecer alerta
                     </button>
                 <?php endif; ?>
@@ -99,7 +99,7 @@ ob_start();
             <?php endif; ?>
 
             <?php if (!$jaReconhecido): ?>
-                <div class="collapse" id="formReconhecimento">
+                <div id="formReconhecimento" style="display:none;">
                     <form method="POST" action="<?= BASE_URL ?>?action=reconhecer-alerta" class="mt-3">
                         <input type="hidden" name="caixa_id" value="<?= htmlspecialchars($caixaId, ENT_QUOTES, 'UTF-8') ?>">
 
@@ -123,7 +123,7 @@ ob_start();
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-danger">Confirmar reconhecimento</button>
                             <button type="button" class="btn btn-outline-secondary"
-                                    data-bs-toggle="collapse" data-bs-target="#formReconhecimento">
+                                    onclick="document.getElementById('formReconhecimento').style.display='none';document.querySelector('.btn.btn-danger.btn-sm').style.display='inline-block';">
                                 Cancelar
                             </button>
                         </div>
@@ -206,7 +206,7 @@ ob_start();
                         <p class="text-secondary">Nenhuma nota fiscal vinculada.</p>
                     <?php else: ?>
 
-                        <div class="accordion accordion-flush" id="accordionNfs">
+                        <div id="accordionNfs">
 
                             <?php foreach ($nfs as $i => $nf):
                                 $nfArr   = (array) $nf;
@@ -216,22 +216,25 @@ ob_start();
                                 $collapseId = 'nf-' . $i;
                             ?>
 
-                                <div class="accordion-item border rounded-3 mb-2">
+                                <div class="border rounded-3 mb-2 overflow-hidden">
 
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed rounded-3 fw-semibold"
-                                                type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#<?= $collapseId ?>">
+                                    <button class="w-100 text-start px-3 py-2 fw-semibold bg-light border-0 d-flex justify-content-between align-items-center"
+                                            type="button"
+                                            onclick="toggleNfDetalhe('<?= $collapseId ?>', this)">
+                                        <span>
                                             NF <?= htmlspecialchars((string) ($nfArr['numero_nf'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
                                             <span class="ms-2 text-secondary fw-normal small">
                                                 — <?= htmlspecialchars((string) ($cliente['nome'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
                                             </span>
-                                        </button>
-                                    </h2>
+                                        </span>
+                                        <svg class="nf-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="6 9 12 15 18 9"/>
+                                        </svg>
+                                    </button>
 
-                                    <div id="<?= $collapseId ?>" class="accordion-collapse collapse">
-                                        <div class="accordion-body pt-2">
+                                    <div id="<?= $collapseId ?>" style="display:none;">
+                                        <div class="p-3 pt-2">
 
                                             <div class="mb-3 small text-secondary">
                                                 <strong>Destinatário:</strong>
@@ -282,6 +285,7 @@ ob_start();
                             <?php endforeach; ?>
 
                         </div>
+
 
                     <?php endif; ?>
 
@@ -386,6 +390,20 @@ ob_start();
     </div>
 
 </div>
+
+<script>
+function toggleNfDetalhe(id, btn) {
+    var el = document.getElementById(id);
+    var chevron = btn.querySelector('.nf-chevron');
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        el.style.display = 'none';
+        chevron.style.transform = '';
+    }
+}
+</script>
 
 <?php if (!empty($seriePeso)): ?>
 <script>

@@ -27,10 +27,9 @@ class AlertaController
             'data_fim'        => $_GET['data_fim']        ?? '',
         ];
 
-        $alertas        = $this->repository->listar($filtros);
-        $totalAbertos   = $this->repository->contarAbertos();
+        $alertas          = $this->repository->listar($filtros);
+        $totalAbertos     = $this->repository->contarAbertos();
         $reconhecidosHoje = $this->repository->contarReconhecidosHoje();
-        $tempoMedio     = $this->repository->tempoMedioReconhecimentoMin();
 
         $filialRepo     = new FilialRepository();
         $filiais        = $filialRepo->listar();

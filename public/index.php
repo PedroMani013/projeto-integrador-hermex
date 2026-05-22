@@ -26,6 +26,7 @@ use App\Controllers\DashboardController;
 use App\Controllers\EventoController;
 use App\Controllers\FilialController;
 use App\Controllers\RelatorioController;
+use App\Controllers\SimuladorController;
 
 $action = $_GET['action'] ?? 'dashboard';
 
@@ -113,6 +114,12 @@ try {
 
         'exportar-custodia' =>
             (new RelatorioController())->exportarCustodiaPdf(),
+
+        'simulador' =>
+            (new SimuladorController())->index(),
+
+        'simular-evento' =>
+            (new SimuladorController())->executar(),
 
         default =>
             (function () {

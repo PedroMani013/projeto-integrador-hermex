@@ -69,7 +69,7 @@ class CaixaController
 
         if ($caixa === null || (string) $caixa['estado'] !== 'criada') {
             $_SESSION['erro'] = 'Caixa não encontrada ou não está em estado "criada".';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
             exit;
         }
 
@@ -83,7 +83,7 @@ class CaixaController
 
         if ($caixa === null || (string) $caixa['estado'] !== 'criada') {
             $_SESSION['erro'] = 'Caixa não encontrada ou não está em estado "criada".';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
             exit;
         }
 
@@ -106,15 +106,15 @@ class CaixaController
             $this->repository->atualizar($caixaId, ['estado' => 'em_transito']);
 
             $_SESSION['sucesso'] = 'Caixa despachada. Monitoramento iniciado.';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao despachar caixa. Tente novamente.';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
         }
 
         exit;
@@ -126,15 +126,15 @@ class CaixaController
             $this->repository->salvar($_POST);
 
             $_SESSION['sucesso'] = 'Caixa cadastrada com sucesso!';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=cadastro-caixa');
+            header('Location: ' . BASE_URL . '?action=cadastro-caixa');
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao salvar caixa. Tente novamente.';
-            header('Location: /?action=cadastro-caixa');
+            header('Location: ' . BASE_URL . '?action=cadastro-caixa');
         }
 
         exit;
@@ -148,15 +148,15 @@ class CaixaController
             $this->repository->lacrar($caixaId, $_POST);
 
             $_SESSION['sucesso'] = 'Caixa lacrada com sucesso!';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=lacrar-caixa&id=' . urlencode($caixaId));
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao lacrar caixa. Tente novamente.';
-            header('Location: /?action=lacrar-caixa&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=lacrar-caixa&id=' . urlencode($caixaId));
         }
 
         exit;
@@ -170,15 +170,15 @@ class CaixaController
             $this->repository->adicionarNf($caixaId, $_POST);
 
             $_SESSION['sucesso'] = 'Nota fiscal vinculada com sucesso!';
-            header('Location: /?action=caixas');
+            header('Location: ' . BASE_URL . '?action=caixas');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=vincular-nf&id=' . urlencode($caixaId));
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao vincular NF. Tente novamente.';
-            header('Location: /?action=vincular-nf&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=vincular-nf&id=' . urlencode($caixaId));
         }
 
         exit;
@@ -225,15 +225,15 @@ class CaixaController
             ]);
 
             $_SESSION['sucesso'] = 'Alerta reconhecido e registrado no histórico.';
-            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=detalhe-caixa&id=' . urlencode($caixaId));
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=detalhe-caixa&id=' . urlencode($caixaId));
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao reconhecer alerta.';
-            header('Location: /?action=detalhe-caixa&id=' . urlencode($caixaId));
+            header('Location: ' . BASE_URL . '?action=detalhe-caixa&id=' . urlencode($caixaId));
         }
 
         exit;

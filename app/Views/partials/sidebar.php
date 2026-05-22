@@ -100,6 +100,20 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
             Categorias
         </a>
 
+        <!-- DEMO -->
+        <span class="sidebar-section" aria-hidden="true">Demo</span>
+
+        <a href="<?= BASE_URL ?>?action=simulador"
+           class="sidebar-link <?= $actionAtual === 'simulador' ? 'ativo' : '' ?>"
+           aria-current="<?= $actionAtual === 'simulador' ? 'page' : 'false' ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Simulador
+        </a>
+
         <!-- ANÁLISE -->
         <span class="sidebar-section" aria-hidden="true">Análise</span>
 

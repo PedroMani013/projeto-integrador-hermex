@@ -28,15 +28,15 @@ class CategoriaController
             $this->repository->salvar($_POST);
 
             $_SESSION['sucesso'] = 'Categoria cadastrada com sucesso!';
-            header('Location: /?action=categorias');
+            header('Location: ' . BASE_URL . '?action=categorias');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=cadastro-categoria');
+            header('Location: ' . BASE_URL . '?action=cadastro-categoria');
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao salvar categoria. Tente novamente.';
-            header('Location: /?action=cadastro-categoria');
+            header('Location: ' . BASE_URL . '?action=cadastro-categoria');
         }
 
         exit;

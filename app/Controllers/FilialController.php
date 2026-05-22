@@ -35,7 +35,7 @@ class FilialController
 
         if ($filial === null) {
             $_SESSION['erro'] = 'Filial não encontrada.';
-            header('Location: /?action=filiais');
+            header('Location: ' . BASE_URL . '?action=filiais');
             exit;
         }
 
@@ -50,15 +50,15 @@ class FilialController
             $this->repository->atualizar($id, $_POST);
 
             $_SESSION['sucesso'] = 'Filial atualizada com sucesso!';
-            header('Location: /?action=filiais');
+            header('Location: ' . BASE_URL . '?action=filiais');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=editar-filial&id=' . urlencode($id));
+            header('Location: ' . BASE_URL . '?action=editar-filial&id=' . urlencode($id));
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao atualizar filial. Tente novamente.';
-            header('Location: /?action=editar-filial&id=' . urlencode($id));
+            header('Location: ' . BASE_URL . '?action=editar-filial&id=' . urlencode($id));
         }
 
         exit;
@@ -80,7 +80,7 @@ class FilialController
             $_SESSION['erro'] = 'Erro ao desativar filial. Tente novamente.';
         }
 
-        header('Location: /?action=filiais');
+        header('Location: ' . BASE_URL . '?action=filiais');
         exit;
     }
 
@@ -90,15 +90,15 @@ class FilialController
             $this->repository->salvar($_POST);
 
             $_SESSION['sucesso'] = 'Filial cadastrada com sucesso!';
-            header('Location: /?action=filiais');
+            header('Location: ' . BASE_URL . '?action=filiais');
 
         } catch (\InvalidArgumentException $e) {
             $_SESSION['erro'] = $e->getMessage();
-            header('Location: /?action=cadastro-filial');
+            header('Location: ' . BASE_URL . '?action=cadastro-filial');
 
         } catch (\Throwable $e) {
             $_SESSION['erro'] = 'Erro ao salvar filial. Tente novamente.';
-            header('Location: /?action=cadastro-filial');
+            header('Location: ' . BASE_URL . '?action=cadastro-filial');
         }
 
         exit;

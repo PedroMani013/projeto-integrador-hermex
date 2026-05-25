@@ -6,12 +6,12 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
 <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
 
     <!-- logo simplificada -->
-    <a href="/" class="sidebar-logo" aria-label="hermeX — ir para o dashboard">
+    <a href="<?= BASE_URL ?>" class="sidebar-logo" aria-label="HermeX — ir para o dashboard">
         <img src="<?= BASE_URL ?>assets/img/logo-hermex.svg"
-             alt="Logo hermeX — ícone de caixa com escudo"
+             alt="Logo HermeX — ícone de caixa com escudo"
              width="40" height="40">
         <span class="sidebar-logo-text">
-            <span class="sidebar-logo-name">hermeX</span>
+            <span class="sidebar-logo-name">HermeX</span>
             <span class="sidebar-logo-sub">Chain of Custody</span>
         </span>
     </a>
@@ -21,7 +21,7 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
         <!-- OPERAÇÃO -->
         <span class="sidebar-section" aria-hidden="true">Operação</span>
 
-        <a href="/?action=dashboard"
+        <a href="<?= BASE_URL ?>?action=dashboard"
            class="sidebar-link <?= $actionAtual === 'dashboard' ? 'ativo' : '' ?>"
            aria-current="<?= $actionAtual === 'dashboard' ? 'page' : 'false' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -33,7 +33,7 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
             Dashboard
         </a>
 
-        <a href="/?action=caixas"
+        <a href="<?= BASE_URL ?>?action=caixas"
            class="sidebar-link <?= $actionAtual === 'caixas' ? 'ativo' : '' ?>"
            aria-current="<?= $actionAtual === 'caixas' ? 'page' : 'false' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -45,7 +45,19 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
             Caixas
         </a>
 
-        <a href="/?action=alertas"
+        <a href="<?= BASE_URL ?>?action=recepcao-nfc"
+           class="sidebar-link <?= $actionAtual === 'recepcao-nfc' ? 'ativo' : '' ?>"
+           aria-current="<?= $actionAtual === 'recepcao-nfc' ? 'page' : 'false' ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/>
+                <path d="m16 3 4 4-4 4"/>
+            </svg>
+            Recepção NFC
+        </a>
+
+        <a href="<?= BASE_URL ?>?action=alertas"
            class="sidebar-link <?= $actionAtual === 'alertas' ? 'ativo' : '' ?>"
            aria-current="<?= $actionAtual === 'alertas' ? 'page' : 'false' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -66,7 +78,7 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
         <!-- CADASTROS -->
         <span class="sidebar-section" aria-hidden="true">Cadastros</span>
 
-        <a href="/?action=filiais"
+        <a href="<?= BASE_URL ?>?action=filiais"
            class="sidebar-link <?= $actionAtual === 'filiais' ? 'ativo' : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -77,21 +89,35 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
             Filiais
         </a>
 
-        <a href="/?action=produtos"
-           class="sidebar-link <?= $actionAtual === 'produtos' ? 'ativo' : '' ?>">
+        <a href="<?= BASE_URL ?>?action=categorias"
+           class="sidebar-link <?= $actionAtual === 'categorias' ? 'ativo' : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <line x1="7" y1="7" x2="7.01" y2="7"/>
             </svg>
-            Produtos
+            Categorias
+        </a>
+
+        <!-- DEMO -->
+        <span class="sidebar-section" aria-hidden="true">Demo</span>
+
+        <a href="<?= BASE_URL ?>?action=simulador"
+           class="sidebar-link <?= $actionAtual === 'simulador' ? 'ativo' : '' ?>"
+           aria-current="<?= $actionAtual === 'simulador' ? 'page' : 'false' ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Simulador
         </a>
 
         <!-- ANÁLISE -->
         <span class="sidebar-section" aria-hidden="true">Análise</span>
 
-        <a href="/?action=relatorios"
+        <a href="<?= BASE_URL ?>?action=relatorios"
            class="sidebar-link <?= $actionAtual === 'relatorios' ? 'ativo' : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -100,7 +126,18 @@ $actionAtual    = $_GET['action'] ?? 'dashboard';
                 <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
                 <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
             </svg>
-            Relatórios
+            Operacional
+        </a>
+
+        <a href="<?= BASE_URL ?>?action=relatorio-custodia"
+           class="sidebar-link <?= $actionAtual === 'relatorio-custodia' ? 'ativo' : '' ?>">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 11l3 3L22 4"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            Custódia
         </a>
 
     </nav>

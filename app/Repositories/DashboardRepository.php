@@ -8,7 +8,6 @@ use App\Models\AlertaRecente;
 use App\Models\Caixa;
 use App\Models\Evento;
 use Config\DatabaseConnection;
-use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\UTCDateTime;
 
 class DashboardRepository
@@ -25,7 +24,7 @@ class DashboardRepository
         return (int) $this->db->caixas->countDocuments(['estado' => 'em_transito']);
     }
 
-    public function contarAnomalias24h(): int
+    public function contarSinaisIsolados24h(): int
     {
         $limite = new UTCDateTime((time() - 86400) * 1000);
         return (int) $this->db->eventos->countDocuments([
@@ -104,31 +103,20 @@ class DashboardRepository
     /** @return AlertaRecente[] */
     public function alertasRecentes(int $limite = 5): array
     {
-        $docs = $this->db->eventos->find(
-            ['$or' => [['peso_anomalo' => true], ['abertura_indevida' => true]]],
-            ['sort' => ['timestamp' => -1], 'limit' => $limite]
+        $docs = $this->db->caixas->find(
+            ['estado' => 'violada'],
+            ['sort' => ['ultimo_evento.timestamp' => -1], 'limit' => $limite]
         );
 
         $alertas = [];
         foreach ($docs as $doc) {
-            if (!isset($doc['caixa_id'])) {
-                continue;
-            }
-            $caixa = $this->db->caixas->findOne(['_id' => $doc['caixa_id']]);
-            if ($caixa === null) {
-                continue;
-            }
-
-            $titulo = $this->tituloAlerta((string) $doc['tipo'], (bool) ($doc['peso_anomalo'] ?? false), (bool) ($doc['abertura_indevida'] ?? false));
-            $nivel  = ((bool) ($doc['abertura_indevida'] ?? false)) ? 'critico' : 'anomalia';
-
             $alertas[] = new AlertaRecente(
-                caixaCodigo:   (string) $caixa['codigo'],
-                titulo:        $titulo,
-                filialOrigem:  (string) $caixa['filial_origem_codigo'],
-                filialDestino: (string) $caixa['filial_destino_codigo'],
-                nivel:         $nivel,
-                timestamp:     $this->toDateTime($doc['timestamp']),
+                caixaCodigo:   (string) ($doc['codigo'] ?? ''),
+                titulo:        'Anomalia detectada',
+                filialOrigem:  (string) ($doc['filial_origem_codigo'] ?? ''),
+                filialDestino: (string) ($doc['filial_destino_codigo'] ?? ''),
+                nivel:         'critico',
+                timestamp:     $this->toDateTime($doc['ultimo_evento']['timestamp'] ?? null),
             );
         }
         return $alertas;
@@ -181,23 +169,31 @@ class DashboardRepository
             );
         }
 
+        $nfs = [];
+        foreach (($doc['notas_fiscais'] ?? []) as $nf) {
+            $nfs[] = (array) $nf;
+        }
+
         return new Caixa(
-            id:                  (string) $doc['_id'],
-            codigo:              (string) $doc['codigo'],
-            tagNfc:              (string) ($doc['tag_nfc'] ?? ''),
-            estado:              (string) $doc['estado'],
-            notaFiscal:          (string) ($doc['nota_fiscal'] ?? ''),
-            totalItens:          (int)    ($doc['total_itens'] ?? 0),
-            pesoBaseline:        (float)  ($doc['peso_baseline'] ?? 0),
-            pesoAtual:           (float)  ($doc['peso_atual'] ?? 0),
-            filialOrigemCodigo:  (string) ($doc['filial_origem_codigo'] ?? ''),
-            filialDestinoCodigo: (string) ($doc['filial_destino_codigo'] ?? ''),
-            filialOrigemNome:    (string) ($doc['filial_origem_nome'] ?? ''),
-            filialDestinoNome:   (string) ($doc['filial_destino_nome'] ?? ''),
-            transportadora:      (string) ($doc['transportadora'] ?? ''),
-            previsaoChegada:     $this->toDateTime($doc['previsao_chegada']),
-            ultimoEvento:        $ultimoEvento,
-            criadoEm:            $this->toDateTime($doc['criado_em']),
+            id:                     (string) $doc['_id'],
+            codigo:                 (string) $doc['codigo'],
+            tagNfc:                 (string) ($doc['tag_nfc'] ?? ''),
+            estado:                 (string) $doc['estado'],
+            notasFiscais:           $nfs,
+            totalItens:             (int)    ($doc['total_itens'] ?? 0),
+            pesoBaseline:           (float)  ($doc['peso_baseline'] ?? 0),
+            pesoAtual:              (float)  ($doc['peso_atual'] ?? 0),
+            toleranciaEfetiva:      isset($doc['tolerancia_efetiva']) ? (float) $doc['tolerancia_efetiva'] : null,
+            anomaliaPesoIniciadaEm: $this->toDateTimeNullable($doc['anomalia_peso_iniciada_em'] ?? null),
+            lacradaEm:              $this->toDateTimeNullable($doc['lacrada_em'] ?? null),
+            filialOrigemCodigo:     (string) ($doc['filial_origem_codigo'] ?? ''),
+            filialDestinoCodigo:    (string) ($doc['filial_destino_codigo'] ?? ''),
+            filialOrigemNome:       (string) ($doc['filial_origem_nome'] ?? ''),
+            filialDestinoNome:      (string) ($doc['filial_destino_nome'] ?? ''),
+            transportadora:         (string) ($doc['transportadora'] ?? ''),
+            previsaoChegada:        $this->toDateTime($doc['previsao_chegada']),
+            ultimoEvento:           $ultimoEvento,
+            criadoEm:               $this->toDateTime($doc['criado_em']),
         );
     }
 
@@ -209,14 +205,12 @@ class DashboardRepository
         return new \DateTimeImmutable();
     }
 
-    private function tituloAlerta(string $tipo, bool $pesoAnomalo, bool $aberturaIndevida): string
+    private function toDateTimeNullable(mixed $v): ?\DateTimeImmutable
     {
-        if ($aberturaIndevida && $pesoAnomalo) {
-            return 'Lacre aberto com variação de peso';
+        if ($v instanceof UTCDateTime) {
+            return \DateTimeImmutable::createFromMutable($v->toDateTime())->setTimezone(new \DateTimeZone('America/Sao_Paulo'));
         }
-        if ($aberturaIndevida) {
-            return 'Tampa aberta durante o trânsito';
-        }
-        return 'Peso fora da tolerância configurada';
+        return null;
     }
+
 }

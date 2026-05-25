@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="hermeX — Monitoramento de cadeia de custódia de cargas em trânsito">
-    <title><?= htmlspecialchars($tituloPagina ?? 'Dashboard') ?> — hermeX</title>
+    <meta name="description" content="HermeX — Monitoramento de cadeia de custódia de cargas em trânsito">
+    <title><?= htmlspecialchars($tituloPagina ?? 'Dashboard') ?> — HermeX</title>
 
     <!-- bootstrap 5 -->
     <link rel="stylesheet"
@@ -14,10 +14,15 @@
 
     <!-- design tokens -->
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/tokens.css">
+    <link rel="stylesheet" href="assets/css/hermex_pages.css">
 
     <!-- CSS específico da página -->
     <?php foreach ($estilos ?? [] as $css): ?>
-        <link rel="stylesheet" href="<?= BASE_URL . ltrim(htmlspecialchars($css), '/') ?>">
+        <?php
+        $cssPath = BASE_PATH . '/public/' . ltrim($css, '/');
+        $v = file_exists($cssPath) ? filemtime($cssPath) : time();
+        ?>
+        <link rel="stylesheet" href="<?= BASE_URL . ltrim(htmlspecialchars($css), '/') ?>?v=<?= $v ?>">
     <?php endforeach; ?>
 </head>
 <body>
@@ -47,7 +52,11 @@
 
 <!-- scripts específicos da página -->
 <?php foreach ($scripts ?? [] as $js): ?>
-    <script src="<?= BASE_URL . ltrim(htmlspecialchars($js), '/') ?>"></script>
+    <?php
+    $jsPath = BASE_PATH . '/public/' . ltrim($js, '/');
+    $v = file_exists($jsPath) ? filemtime($jsPath) : time();
+    ?>
+    <script src="<?= BASE_URL . ltrim(htmlspecialchars($js), '/') ?>?v=<?= $v ?>"></script>
 <?php endforeach; ?>
 
 </body>

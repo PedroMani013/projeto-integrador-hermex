@@ -20,12 +20,12 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
 
     <!-- breadcrumb fixo em Dashboard; quando outras telas existirem, tornar dinâmico com base na rota atual -->
     <nav class="header-breadcrumb" aria-label="Localização atual">
-        hermeX <span aria-hidden="true"> / </span> <strong>Dashboard</strong>
+        HermeX <span aria-hidden="true"> / </span> <strong>Dashboard</strong>
     </nav>
 
     <!-- busca -->
     <div class="header-search">
-        <form role="search" action="/?action=caixas" method="get">
+        <form role="search" action="<?= BASE_URL ?>?action=caixas" method="get">
             <input type="search"
                    name="busca"
                    placeholder="Buscar caixa, nota fiscal, filial"
@@ -36,7 +36,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
 
     <!-- ações -->
     <div class="header-actions">
-        <button class="header-icon-btn" aria-label="Atualizar dados" type="button" id="btnAtualizar">
+        <button class="header-icon-btn" aria-label="Atualizar dados" type="button" id="btnAtualizar" onclick="location.reload()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
@@ -45,7 +45,9 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
             </svg>
         </button>
 
-        <button class="header-icon-btn" aria-label="Notificações<?= $alertasAbertos > 0 ? " ({$alertasAbertos} alertas abertos)" : '' ?>" type="button">
+        <a href="<?= BASE_URL ?>?action=alertas"
+           class="header-icon-btn text-decoration-none"
+           aria-label="Notificações<?= $alertasAbertos > 0 ? " ({$alertasAbertos} alertas abertos)" : '' ?>">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
@@ -55,7 +57,7 @@ $alertasAbertos = $indicadores['alertasAbertos'] ?? 0;
             <?php if ($alertasAbertos > 0): ?>
                 <span class="notif-dot" aria-hidden="true"></span>
             <?php endif; ?>
-        </button>
+        </a>
     </div>
 
 </header>

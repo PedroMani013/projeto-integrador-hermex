@@ -47,15 +47,15 @@ ob_start();
         </p>
     </div>
     <div class="page-header-actions">
-        <!-- HU01: conectar ao formulário/modal de cadastro de caixa quando implementado -->
-        <button class="btn-hermex-primary" type="button">
+        <a href="<?= BASE_URL ?>?action=cadastro-caixa"
+           class="btn-hermex-primary text-decoration-none">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round"
                  stroke-linejoin="round" aria-hidden="true">
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
             Nova caixa
-        </button>
+        </a>
     </div>
 </div>
 
@@ -79,7 +79,7 @@ ob_start();
     </div>
     <div class="faixa-alerta-acoes">
         <!-- HU15: quando a tela de alertas existir, redirecionar para /?action=alertas em vez de filtrar caixas -->
-        <a href="/?action=caixas&estado=violada" class="btn btn-sm btn-danger">
+        <a href="<?= BASE_URL ?>?action=alertas" class="btn btn-sm btn-danger">
             Ver alertas
         </a>
     </div>
@@ -131,9 +131,9 @@ ob_start();
                     aria-hidden="true"></canvas>
         </div>
         <div>
-            <p class="card-indicador-label">Anomalias em 24h</p>
-            <p class="card-indicador-valor" aria-label="<?= $indicadores['anomalias24h'] ?> anomalias nas últimas 24 horas">
-                <?= $indicadores['anomalias24h'] ?>
+            <p class="card-indicador-label">Sinais detectados (24h)</p>
+            <p class="card-indicador-valor" aria-label="<?= (int) ($indicadores['sinaisIsolados24h'] ?? 0) ?> sinais isolados nas últimas 24 horas">
+                <?= (int) ($indicadores['sinaisIsolados24h'] ?? 0) ?>
             </p>
         </div>
         <p class="card-indicador-comp">Nos últimos eventos registrados</p>
@@ -213,7 +213,7 @@ ob_start();
     <section class="painel-card" aria-labelledby="titulo-alertas">
         <div class="painel-card-header">
             <h2 class="painel-card-titulo" id="titulo-alertas">Alertas recentes</h2>
-            <a href="/?action=alertas" class="link-muted">Ver todos</a>
+            <a href="<?= BASE_URL ?>?action=alertas" class="link-muted">Ver todos</a>
         </div>
         <div class="painel-card-body" style="padding: 0 20px;">
 
@@ -268,7 +268,7 @@ ob_start();
                 <?= $total ?>
             </span>
         </div>
-        <a href="/?action=caixas&estado=em_transito" class="link-muted">Ver todas</a>
+        <a href="<?= BASE_URL ?>?action=caixas&estado=em_transito" class="link-muted">Ver todas</a>
     </div>
 
     <?php if (empty($caixas)): ?>
@@ -301,8 +301,10 @@ ob_start();
                             <td>
                                 <div class="caixa-codigo"><?= htmlspecialchars($caixa->codigo) ?></div>
                                 <div class="caixa-nf">
-                                    NF <?= htmlspecialchars($caixa->notaFiscal) ?>
-                                    <span aria-hidden="true"> • </span>
+                                    <?php
+                                        $primeiraНф = $caixa->notasFiscais[0]['numero_nf'] ?? null;
+                                        echo $primeiraНф ? 'NF ' . htmlspecialchars($primeiraНф) . ' • ' : '';
+                                    ?>
                                     <?= $caixa->totalItens ?> itens
                                 </div>
                             </td>
@@ -377,7 +379,7 @@ ob_start();
                     <div class="caixa-card-grid">
                         <div>
                             <div class="caixa-card-label">Nota fiscal</div>
-                            <div class="caixa-card-val"><?= htmlspecialchars($caixa->notaFiscal) ?></div>
+                            <div class="caixa-card-val"><?= htmlspecialchars($caixa->notasFiscais[0]['numero_nf'] ?? '-') ?></div>
                         </div>
                         <div>
                             <div class="caixa-card-label">Itens</div>
@@ -419,7 +421,7 @@ ob_start();
             </span>
             <div class="paginacao-btns">
                 <?php if ($pagina > 1): ?>
-                    <a href="/?action=dashboard&pagina=<?= $pagina - 1 ?>"
+                    <a href="<?= BASE_URL ?>?action=dashboard&pagina=<?= $pagina - 1 ?>"
                        class="paginacao-btn"
                        aria-label="Página anterior">
                         ← Anterior
@@ -434,7 +436,7 @@ ob_start();
                 </span>
 
                 <?php if ($pagina < $totalPaginas): ?>
-                    <a href="/?action=dashboard&pagina=<?= $pagina + 1 ?>"
+                    <a href="<?= BASE_URL ?>?action=dashboard&pagina=<?= $pagina + 1 ?>"
                        class="paginacao-btn"
                        aria-label="Próxima página">
                         Próxima →

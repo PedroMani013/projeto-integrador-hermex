@@ -23,7 +23,7 @@ class DashboardController
 
             $indicadores = [
                 'caixasEmTransito'    => $this->repo->contarCaixasEmTransito(),
-                'anomalias24h'        => $this->repo->contarAnomalias24h(),
+                'sinaisIsolados24h'   => $this->repo->contarSinaisIsolados24h(),
                 'entreguesMes'        => $this->repo->contarCaixasEntreguesMes(),
                 'alertasAbertos'      => $this->repo->contarAlertasAbertos(),
             ];

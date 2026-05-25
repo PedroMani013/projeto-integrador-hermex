@@ -1,5 +1,5 @@
 /**
- * hermeX — Gráfico de Integridade da Cadeia (Chart.js)
+ * HermeX — Gráfico de Integridade da Cadeia (Chart.js)
  * Consome window.HERMEX_DADOS_INTEGRIDADE injetado pela view PHP.
  */
 

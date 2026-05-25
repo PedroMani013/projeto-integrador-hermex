@@ -1,6 +1,6 @@
-# hermeX — Sistema de Monitoramento de Cadeia de Custódia
+# HermeX — Sistema de Monitoramento de Cadeia de Custódia
 
-hermeX é um sistema web para monitoramento de caixas em trânsito entre filiais, com detecção de anomalias e histórico auditável de cada carga. Desenvolvido como Projeto Interdisciplinar 3 e 4 do curso de Desenvolvimento de Software Multiplataforma — FATEC Itapira.
+HermeX é um sistema web para monitoramento de caixas em trânsito entre filiais, com detecção de anomalias e histórico auditável de cada carga. Desenvolvido como Projeto Interdisciplinar 3 e 4 do curso de Desenvolvimento de Software Multiplataforma — FATEC Itapira.
 
 O sistema permite acompanhar em tempo real o estado das cargas, identificar violações de custódia (peso, lacre, temperatura) e gerar indicadores operacionais para gestores.
 

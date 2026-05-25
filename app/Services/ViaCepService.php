@@ -28,7 +28,7 @@ class ViaCepService
         $ctx = stream_context_create(['http' => [
             'timeout' => self::TIMEOUT,
             'method'  => 'GET',
-            'header'  => "User-Agent: hermeX/1.0\r\n",
+            'header'  => "User-Agent: HermeX/1.0\r\n",
         ]]);
 
         $resposta = @file_get_contents($url, false, $ctx);
